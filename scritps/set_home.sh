@@ -1,0 +1,3 @@
+export PX4_HOME_LAT=0
+export PX4_HOME_LON=0
+export PX4_HOME_ALT=0
