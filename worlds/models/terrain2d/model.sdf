@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.5">
-  <model name="contour">
+  <model name="terrain2d">
     <static>true</static>
     <link name="link">
       <collision name="collision">
@@ -15,7 +15,7 @@
       <visual name="visual_abcedf">
         <geometry>
           <heightmap>
-            <use_terrain_paging>false</use_terrain_paging>
+            <use_terrain_paging>true</use_terrain_paging>
             <texture>
               <diffuse>file://media/materials/textures/dirt_diffusespecular.png</diffuse>
               <normal>file://media/materials/textures/flat_normal.png</normal>
@@ -29,7 +29,7 @@
             <texture>
               <diffuse>file://media/materials/textures/fungus_diffusespecular.png</diffuse>
               <normal>file://media/materials/textures/flat_normal.png</normal>
-              <size>1</size>
+              <size>1</size> 
             </texture>
             <blend>
               <min_height>2</min_height>
