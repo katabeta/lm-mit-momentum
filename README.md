@@ -26,8 +26,7 @@ If you are viewing this file offline, the most up to date version of these instr
   - [8.1. Set home position](#81-set-home-position)
   - [8.2. Launch PX4 with Gazebo](#82-launch-px4-with-gazebo)
   - [8.3. Set PX4 firmware parameters](#83-set-px4-firmware-parameters)
-  - [8.4. OPTIONAL Launch PX4 with jMAVSim (instead of Gazebo)](#84-optional-launch-px4-with-jmavsim-instead-of-gazebo)
-  - [8.5. OPTIONAL Launch QGroundControl](#85-optional-launch-qgroundcontrol)
+  - [8.4. OPTIONAL Launch QGroundControl](#84-optional-launch-qgroundcontrol)
 - [9. Run a mission file](#9-run-a-mission-file)
 - [10. Query sensor values using py3gazebo - GPS Example](#10-query-sensor-values-using-py3gazebo---gps-example)
 - [11. Getting started with MAVSDK](#11-getting-started-with-mavsdk)
@@ -415,19 +414,7 @@ param save # Optionally save params (not done automatically with load)
 param reset_all
 ```
 
-### 8.4. OPTIONAL Launch PX4 with jMAVSim (instead of Gazebo)
-
-Summary of [PX4 simulation with jMAVSim](https://dev.px4.io/master/en/simulation/jmavsim.html):
-
-``` sh
-# Get into the PX4 project folder
-cd ~/Momentum/PX4/PX4-Autopilot
-
-# Launch PX4 and jMAVSim
-make px4_sitl jmavsim
-```
-
-### 8.5. OPTIONAL Launch QGroundControl
+### 8.4. OPTIONAL Launch QGroundControl
 
 Summary of [QGRoundControl installation instructions](https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html):
 
@@ -455,9 +442,9 @@ Get the available Gazebo topics and get the information on the topic of interest
 
 ``` sh
 gz topic -l | grep gps
-# '/gazebo/default/iris/gps0/link/gps'
+# /gazebo/default/iris_lmlidar/gps0/link/gps
 
-gz topic -i /gazebo/default/iris/gps0/link/gps
+gz topic -i /gazebo/default/iris_lmlidar/gps0/link/gps
 # Type: gazebo.msgs.GPS
 # 
 # Publishers:
@@ -466,7 +453,7 @@ gz topic -i /gazebo/default/iris/gps0/link/gps
 # Subscribers:
 ```
 
-Create a message subscriber class with a message callback and a way to poll the data when needed. Get your Gazebo Master IP-Address and Port from the following message when launching PX4 `[Msg] Connected to gazebo master @ http://127.0.0.1:11345`.
+Create a message subscriber class with a message callback and a way to poll the data when needed. Get your Gazebo Master IP-Address and Port from the following message when launching PX4 `[Msg] Connected to gazebo master @ http://127.0.0.1:11345`. The following is the same as in the file [demo_gps_read.py](https://github.com/katabeta/lm-mit-momentum/blob/master/demos/demo_gps_read.py).
 
 ``` python
 import time # For the example only
@@ -478,7 +465,8 @@ import pygazebo.msg.v11.gps_pb2
 
 
 
-# This is the gazebo master from PX4 message `[Msg] Connected to gazebo master @ http://127.0.0.1:11345`
+# This is the gazebo master from PX4 message
+# `[Msg] Connected to gazebo master @ http://127.0.0.1:11345`
 HOST, PORT = "127.0.0.1", 11345
 
 
@@ -504,7 +492,9 @@ class GazeboMessageSubscriber:
 
         if connected: 
             # info from gz topic -l, gz topic -i arg goes here
-            self.gps_subscriber = self.manager.subscribe('/gazebo/default/iris/gps0/link/gps', 'gazebo.msgs.GPS', self.gps_callback)
+            self.gps_subscriber = self.manager.subscribe('/gazebo/default/iris_lmlidar/gps0/link/gps',
+                                                         'gazebo.msgs.GPS',
+                                                         self.gps_callback)
 
             await self.gps_subscriber.wait_for_connection()
             self.running = True
@@ -531,7 +521,7 @@ class GazeboMessageSubscriber:
 async def run():
     gz_sub = GazeboMessageSubscriber(HOST, PORT)
     asyncio.ensure_future(gz_sub.connect())
-
+    gps_val = await gz_sub.get_GPS()
     # Simulate doing stuff and polling for the gps values only when needed
     start = time.time()
     current_time = 0
