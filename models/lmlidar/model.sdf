@@ -27,7 +27,7 @@
       <sensor name="lmlidar" type="ray">
 
         <always_on>1</always_on>
-        <update_rate>5.5</update_rate>
+        <update_rate>1</update_rate>
         <visualize>true</visualize>
         <topic>lm_lidar_scan</topic>
 
