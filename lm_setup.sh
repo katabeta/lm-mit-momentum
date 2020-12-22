@@ -12,6 +12,9 @@ cp ./ROMFS/1043_iris_lmlidar ../PX4/PX4-Autopilot/build/px4_sitl_default/etc/ini
 # Copy cmake file
 cp -f cmake/sitl_target.cmake ../PX4/PX4-Autopilot/platforms/posix/cmake/sitl_target.cmake
 
+# Copy py3gazebo setup file
+cp -f py3gazebo_setup/setup.py ../py3gazebo/setup.py
+
 # Copy other helpful files
 cp scritps/set_home.sh ../PX4/PX4-Autopilot/
 cp px4_param_defaults/iris_defaults ../PX4/PX4-Autopilot/build/px4_sitl_default/tmp/rootfs/

@@ -1,6 +1,6 @@
 # How to make your own terrain <!-- omit in toc -->
 
-You should **not** need to create your own terrain for this project, so this section will be brief.
+You should **not** need to create your own terrain for this project, so this section will be brief and provide more for debugging purposes.
 
 <!-- TOC and section numbers automatically generated, do not manually edit -->
 - [1. Terrain](#1-terrain)
@@ -26,7 +26,7 @@ In summary:
 2. Add the `.png` you created to the `.world` file for your new terrain.
     - The `<size>` tag specifies how large your terrain actually is in simulation (x, y, z in meters)
 3. Modify `cmake/sitl_target.cmake` with the name of your world
-4. Add your terrain files to the script to place them in right places or do so manually
+4. Add your terrain files to the `lm_setup.sh` script to place them in right places or do so manually
 
 ### 1.2. Create a terrain based on real world terrain
 
@@ -73,4 +73,10 @@ Summary of [Gazebo DEMs Tutorial](http://gazebosim.org/tutorials/?tut=dem):
 
 ## 2. LiDAR
 
-*Under construction.*
+This entails a somewhat involved process consisting of
+
+1. Creating a sensor model in `.sdf` format for the lidar similar to what is done for the [lmlidar](https://github.com/katabeta/lm-mit-momentum/tree/master/models/lmlidar).
+2. Creating a vehicle model in `.sdf` format to include that lidar, even if that vehicle already exists in other iterations. An example of this is the [iris_lmlidar vehicle model](https://github.com/katabeta/lm-mit-momentum/commits/master/models/iris_lmlidar).
+3. Creating a ROMFS script formatted as `<number>_vehicle_name`. E.g. [1043_iris_lmlidar](https://github.com/katabeta/lm-mit-momentum/blob/master/ROMFS/1043_iris_lmlidar).
+4. Updating [line 94 of the cmake file](https://github.com/katabeta/lm-mit-momentum/blob/master/cmake/sitl_target.cmake#L94) with the name of your vehicle (specifically the one that includes your new lidar).
+5. Updating the setup script to copy your new models and ROMFS script into the right places in Gazebo and PX4.
