@@ -1,30 +1,44 @@
 # Getting Started <!-- omit in toc -->
 <!-- TOC and section numbers automatically generated, do not manually edit -->
 - [1. Install Ubuntu 18.04 LTS or 20.04 LTS](#1-install-ubuntu-1804-lts-or-2004-lts)
-- [2. Install IDE - VS Code](#2-install-ide---vs-code)
+  - [1.1. Basic steps to install Ubuntu outside of a Virtual Machine](#11-basic-steps-to-install-ubuntu-outside-of-a-virtual-machine)
+  - [1.2. Basic steps to install Ubuntu inside of a Virtual Machine](#12-basic-steps-to-install-ubuntu-inside-of-a-virtual-machine)
+- [2. Install VS Code IDE](#2-install-vs-code-ide)
 - [3. Get Gazebo and PX4](#3-get-gazebo-and-px4)
-- [4. Build PX4](#4-build-px4)
-- [5. OPTIONAL Install QGroundControl](#5-optional-install-qgroundcontrol)
-  - [5.1. Fix problem where PX4 running Gazebo can't connect to QGroundControl](#51-fix-problem-where-px4-running-gazebo-cant-connect-to-qgroundcontrol)
-- [6. Install MAVSDK](#6-install-mavsdk)
-- [7. Install py3gazebo](#7-install-py3gazebo)
-  - [7.1. How to find sensor topic name and message type](#71-how-to-find-sensor-topic-name-and-message-type)
-- [8. Adding LM-provided LiDAR and terrain](#8-adding-lm-provided-lidar-and-terrain)
-  - [8.1. Creating your own terrain](#81-creating-your-own-terrain)
-- [9. Launch simulation](#9-launch-simulation)
-  - [9.1. Set home position](#91-set-home-position)
-  - [9.2. Set firmware parameters](#92-set-firmware-parameters)
-  - [9.3. Launch PX4 with Gazebo](#93-launch-px4-with-gazebo)
-  - [9.4. OPTIONAL Launch PX4 with jMAVSim (instead of Gazebo)](#94-optional-launch-px4-with-jmavsim-instead-of-gazebo)
-  - [9.5. OPTIONAL Launch QGroundControl](#95-optional-launch-qgroundcontrol)
-- [10. Run mission file](#10-run-mission-file)
-- [11. Query sensor values using py3gazebo - GPS Example](#11-query-sensor-values-using-py3gazebo---gps-example)
-- [12. Getting started with MAVSDK](#12-getting-started-with-mavsdk)
+  - [3.1. Clone PX4 and install Gazebo](#31-clone-px4-and-install-gazebo)
+  - [3.2. Build PX4](#32-build-px4)
+- [4. OPTIONAL Install QGroundControl](#4-optional-install-qgroundcontrol)
+  - [4.1. Fix problem where PX4 running Gazebo can't connect to QGroundControl](#41-fix-problem-where-px4-running-gazebo-cant-connect-to-qgroundcontrol)
+- [5. Install MAVSDK](#5-install-mavsdk)
+- [6. Install py3gazebo](#6-install-py3gazebo)
+  - [6.1. How to find sensor topic name, message type, and get sample output](#61-how-to-find-sensor-topic-name-message-type-and-get-sample-output)
+- [7. Adding LM-provided LiDAR and terrain](#7-adding-lm-provided-lidar-and-terrain)
+  - [7.1. Creating your own terrain](#71-creating-your-own-terrain)
+- [8. Launch simulation](#8-launch-simulation)
+  - [8.1. Set home position](#81-set-home-position)
+  - [8.2. Launch PX4 with Gazebo](#82-launch-px4-with-gazebo)
+  - [8.3. Set PX4 firmware parameters](#83-set-px4-firmware-parameters)
+  - [8.4. OPTIONAL Launch PX4 with jMAVSim (instead of Gazebo)](#84-optional-launch-px4-with-jmavsim-instead-of-gazebo)
+  - [8.5. OPTIONAL Launch QGroundControl](#85-optional-launch-qgroundcontrol)
+- [9. Run a mission file](#9-run-a-mission-file)
+- [10. Query sensor values using py3gazebo - GPS Example](#10-query-sensor-values-using-py3gazebo---gps-example)
+- [11. Getting started with MAVSDK](#11-getting-started-with-mavsdk)
+  - [11.1. Download MAVSDK examples](#111-download-mavsdk-examples)
+  - [11.2. Run a MAVSDK example (PX4 and Gazebo have to be running)](#112-run-a-mavsdk-example-px4-and-gazebo-have-to-be-running)
 <!-- TOC and section numbers automatically generated, do not manually edit -->
+
+If you are viewing this file offline, the most up to date version of these instructions is located in the [project GitHub](https://github.com/katabeta/lm-mit-momentum).
+
+**NOTES:**
+
+1. Unless otherwise specified, all instructions are to be entered into the terminal in your Ubuntu installation.
+2. Commands that start with `sudo` will require your user password. Using sudo invokes superuser security privileges and is akin to running an application as an administrator in Windows.
 
 ## 1. Install Ubuntu 18.04 LTS or 20.04 LTS
 
-Basic steps to install Ubuntu are:
+The software required for this project runs and is supported only in Ubuntu 18.04 or 20.04. As such, it is necessary to install this operating system to complete the project.
+
+### 1.1. Basic steps to install Ubuntu outside of a Virtual Machine
 
 1. [Download an Ubuntu image](https://ubuntu.com/download/desktop)
 2. [Verify image download is not corrupted](https://ubuntu.com/tutorials/how-to-verify-ubuntu#1-overview)
@@ -39,11 +53,25 @@ Basic steps to install Ubuntu are:
     - [Install with persistent storage onto a USB drive](https://www.techrepublic.com/article/how-to-create-a-live-usb-drive-with-persistent-storage-in-ubuntu/) (**advanced**)
     - [Install instead of current OS](https://ubuntu.com/tutorials/install-ubuntu-desktop#6-allocate-drive-space) (**not recommended**)
 
-## 2. Install IDE - VS Code
+### 1.2. Basic steps to install Ubuntu inside of a Virtual Machine
+
+1. [Install VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+2. [Download an Ubuntu image](https://ubuntu.com/download/desktop)
+3. [Verify image download is not corrupted](https://ubuntu.com/tutorials/how-to-verify-ubuntu#1-overview)
+4. [Install Ubuntu in Virtual Box](https://brb.nci.nih.gov/seqtools/installUbuntu.html)
+
+## 2. Install VS Code IDE
+
+VS Code is an open-source light-weight feature-rich IDE (Integrated Development Environment) developed by Microsoft. Using an IDE greatly enhances the developer's comfort when coding by enabling features such as syntax highlighting, suggestions, and linting.
 
 Summary of [VS Code setup instructions](https://code.visualstudio.com/docs/setup/linux):
 
 ``` sh
+# Make the home directory for the project and step into it.
+# You may install your software in a different directory, but then take care to change your home directory when following the instructions.
+mkdir ~/Momentum/temp
+cd ~/Momentum/temp
+
 # Install repository and signing key
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
 sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
@@ -57,9 +85,20 @@ sudo apt-get install code
 
 ## 3. Get Gazebo and PX4
 
-Summary of [PX4 setup guide for ubuntu](https://dev.px4.io/master/en/setup/dev_env_linux_ubuntu.html):
+PX4 is industry-standard autopilot software for hobbyist drone applications. It provides easy access to high quality control laws for a variety of drones, including in simulation. For the purposes of this project, this software will allow the user to simply set waypoints, while the PX4 software performs all of the necessary calculations to control and interface with the motors to get the drone to the next waypoint.
+
+Gazebo is similarly positioned in the robotics simulation world and is heavily used with ROS (Robot Operating System, not used in this project). Gazebo enables real time physics simulation, sensor and terrain integration, and provides visual feedback for the user.
+
+### 3.1. Clone PX4 and install Gazebo
+
+Summary of [PX4 and Gazebo setup guide for ubuntu](https://dev.px4.io/master/en/setup/dev_env_linux_ubuntu.html):
 
 ``` sh
+# Return to home
+cd ~/Momentum
+mkdir PX4
+cd PX4
+
 # Clone PX4
 git clone https://github.com/PX4/PX4-Autopilot.git --recursive
 
@@ -74,13 +113,13 @@ bash ./Tools/setup/ubuntu.sh
 #
 ```
 
-## 4. Build PX4
+### 3.2. Build PX4
 
 Summary of [PX4 simulation with Gazebo](https://dev.px4.io/master/en/simulation/gazebo.html):
 
 ``` sh
 # Get into the PX4 project directory
-cd /path/to/PX4-Autopilot
+cd ~/Momentum/PX4/PX4-Autopilot
 
 # Make the project with default vehicle target and gazebo simulation target
 make px4_sitl gazebo
@@ -91,7 +130,9 @@ Take note:
 - IP-address on the line that looks like `[Msg] Publicized address: 192.168.0.10` will be useful if PX4 can't connect to QGroundControl when running Gazebo.
 - IP-address on the line that looks like `[Msg] Connected to gazebo master @ http://127.0.0.1:11345` will be useful when setting up py3gazebo.
 
-## 5. OPTIONAL Install QGroundControl
+## 4. OPTIONAL Install QGroundControl
+
+QGroundControl can be seen as a companion application to PX4. It provides a GUI interface for some of the most commonly used parameters in PX4. It also provides a contextualized view of the running mission. This software is not necessary to complete the project, but it may be useful for debugging.
 
 Summary of [QGRoundControl installation instructions](https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html):
 
@@ -109,6 +150,9 @@ sudo apt install gstreamer1.0-plugins-bad gstreamer1.0-libav gstreamer1.0-gl -y
 # Log out and log back in.
 #
 
+# Return to home
+cd ~/Momentum
+
 # Download QGroundControl app image
 wget https://s3-us-west-2.amazonaws.com/qgroundcontrol/latest/QGroundControl.AppImage
 
@@ -119,13 +163,13 @@ chmod +x ./QGroundControl.AppImage
 ./QGroundControl.AppImage # (or double-click)
 ```
 
-### 5.1. Fix problem where PX4 running Gazebo can't connect to QGroundControl
+### 4.1. Fix problem where PX4 running Gazebo can't connect to QGroundControl
 
 Summary of [forum post solving this issue](https://discuss.px4.io/t/how-to-make-qgcontrol-connect-to-gazebo-simulation-instance-in-another-host-in-same-lan/9941):
 
 ``` sh
 # Get into the PX4 project directory
-cd /path/to/PX4-Autopilot
+cd ~/Momentum/PX4/PX4-Autopilot
 
 # Edit the startup script
 gedit ROMFS/px4fmu_common/init.d-posix/rcS 
@@ -143,7 +187,9 @@ e.g.
 mavlink start -x -u $udp_gcs_port_local -r 4000000 -t 192.168.0.10
 ```
 
-## 6. Install MAVSDK
+## 5. Install MAVSDK
+
+MAVSDK provides the Python hooks to interface with PX4. This allows the user to control the drone in a programmatic way, enabling complex missions and performing intricate algorithms.
 
 Summary of [Python MAVSDK installation guide](https://github.com/mavlink/MAVSDK-Python#mavsdk-python):
 
@@ -152,9 +198,14 @@ Summary of [Python MAVSDK installation guide](https://github.com/mavlink/MAVSDK-
 pip3 install mavsdk
 ```
 
-## 7. Install py3gazebo
+## 6. Install py3gazebo
+
+Similar to MAVSDK, py3gazebo provides Python hooks to interface with Gazebo and its messages. This software is necessary in this project to read sensor data from Gazebo.
 
 ``` sh
+# Step into project home directory
+cd ~/Momentum
+
 # Clone py3gazebo from GitHub and cd into the folder
 git clone https://github.com/wil3/py3gazebo.git
 cd py3gazebo
@@ -168,6 +219,8 @@ find ./ -type f -exec sed -i 's/asyncio.async/asyncio.ensure_future/g' {} \;
 # Update proto definitions from the root of the py3gazebo project
 GAZEBO_HOME=/usr/include/gazebo-11
 protoc --proto_path=$GAZEBO_HOME/gazebo/msgs --python_out=pygazebo/msg $GAZEBO_HOME/gazebo/msgs/*proto
+
+gedit setup.py
 ```
 
 Replace these lines in `setup.py` with
@@ -185,22 +238,30 @@ packages=[
 ],
 ```
 
+Save and close. Return to the terminal.
+
 ``` sh
 # Install the Python library
 sudo python3 setup.py install
 ```
 
-### 7.1. How to find sensor topic name and message type
+### 6.1. How to find sensor topic name, message type, and get sample output
 
-Should be `/gazebo/default/iris_lmlidar/lmlidar/link/laser/scan`
+The following commands only work with Gazebo running and vehicle spawned in the simulation.
+
+Get a list of all gazebo topics, filter for the word `scan`
 
 ``` sh
-gz topic -l
+gz topic -l | grep scan
 # ...
-# `/gazebo/default/iris_lmlidar/lmlidar/link/laser/scan`
+# /gazebo/default/iris_lmlidar/lmlidar/link/lmlidar/scan
 #...
+```
 
-gz topic -i /gazebo/default/iris_lmlidar/lmlidar/link/laser/scan
+Get the details on the lidar topic specifically
+
+``` sh
+gz topic -i /gazebo/default/iris_lmlidar/lmlidar/link/lmlidar/scan
 # Type: gazebo.msgs.LaserScanStamped
 # 
 # Publishers:
@@ -210,16 +271,65 @@ gz topic -i /gazebo/default/iris_lmlidar/lmlidar/link/laser/scan
 #   192.168.0.10:46127
 ```
 
-## 8. Adding LM-provided LiDAR and terrain
+Echo the topic to the terminal - this will spam to your terminal, so press `Ctrl+C` to stop.
+
+``` sh
+gz topic -e '/gazebo/default/iris_lmlidar/lmlidar/link/lmlidar/scan'
+# time {
+#   sec: 12
+#   nsec: 404000000
+# }
+# scan {
+#   frame: "iris_lmlidar::lmlidar::link"
+#   world_pose {
+#     position {
+#       x: 1.1076721818607924
+#       y: 0.97990294068076067
+#       z: -3.0112717917544356
+#     }
+#     orientation {
+#       x: -9.72964361274114e-05
+#       y: -0.0223892966197638
+#       z: 0.000623484894630627
+#       w: 0.99974912913033442
+#     }
+#   }
+#   angle_min: -0.5236
+#   angle_max: 0.5236
+#   angle_step: 0.055115789473684208
+#   range_min: 0.2
+#   range_max: 10
+#   count: 20
+#   vertical_angle_min: -1.57
+#   vertical_angle_max: 0
+#   vertical_angle_step: 0.19625
+#   vertical_count: 9
+#   ranges: 0.34457796070222135
+#   ...
+#   ranges: 0.57489344102911
+#   intensities: 0
+#   ...
+#   intensities: 0
+# }
+
+```
+
+## 7. Adding LM-provided LiDAR and terrain
 
 Based on this [forum post](https://discuss.px4.io/t/create-custom-model-for-sitl/6700/2).
 
-1. Download the LM provided assets from this repository and place parallel to your PX4 top folder
-   - Your workspace directory should look like this:
+1. Download the LM provided assets from [this repository](https://github.com/katabeta/lm-mit-momentum) and place parallel to your PX4 top folder
+
+    ``` sh
+    cd ~/Momentum
+    git clone https://github.com/katabeta/lm-mit-momentum.git
+    ```
+
+   - After downloading, your workspace directory should look like this (*otherwise the script will fail*):
 
         ``` tree
         .
-         ├── LM-assets
+         ├── lm-mit-momentum
          │   ├── ...
          ├── PX4
          │   ├── PX4-Autopilot
@@ -230,7 +340,7 @@ Based on this [forum post](https://discuss.px4.io/t/create-custom-model-for-sitl
          └── ...
         ```
 
-2. Run the bash script in the downloaded folder (`bash lm_setup.sh`)
+2. Run the bash script in the downloaded folder (with `bash lm_setup.sh`)
    - If you see the following printed to the terminal, the script has succeded:
 
       ```sh
@@ -238,83 +348,53 @@ Based on this [forum post](https://discuss.px4.io/t/create-custom-model-for-sitl
       gazebo_iris_lmlidar__terrain3d
       ```
 
-### 8.1. Creating your own terrain
+### 7.1. Creating your own terrain
 
-You should **not** need to create your own terrain for this project, so this section will be brief.
+You should **not** need to create your own terrain for this project. If you are still looking for instruction on making your own terrain, refer to [making_terrain.md](https://github.com/katabeta/lm-mit-momentum/blob/master/making_terrain.md).
 
-This [video](https://vimeo.com/58409707) shows the steps.
-In summary:
+## 8. Launch simulation
 
-1. Create a `.png` in your favorite graphical editing software.
-    - Make sure to remove the alpha channel
-    - Make sure that the image is unsigned 8-bit
-    - Make sure that the image is square
-    - Make sure that the number of pixels per edge is $2^n+1$, where $n=0,1,2,3...$
-    - White marks the tallest areas and black marks the shortest areas of your terrain
-2. Add the `.png` you created to the `.world` file for your new terrain.
-    - The `<size>` tag specifies how large your terrain actually is in simulation (x, y, z in meters)
-3. Modify `cmake/sitl_target.cmake` with the name of your world
-4. Add your terrain files to the script to place them in right places or do so manually
-
-To create a terrain based on real world terrain, replace step 1 above with the following.
-
-Summary of [Gazebo DEMs Tutorial](http://gazebosim.org/tutorials/?tut=dem):
-
-1. Follow the steps below to create a terrain and world.
-
-   ``` sh
-   # Install dependencies for manipulating terrain data
-   sudo apt-get install gdal-bin libgdal-dev
-   pip3 install GDAL
-
-   # Make and step into gazebo resources directory
-   mkdir -p /tmp/gazebo
-   cd /tmp/gazebo
-
-   # Get terrain file and unzip
-   wget https://github.com/osrf/gazebo_tutorials/raw/master/dem/files/mtsthelens_after.zip
-   unzip ./mtsthelens_after.zip -d .
-
-   # Rename file to something friendly
-   mv ./10.2.1.1043901.dem ./mtsthelens.dem
-
-   # Make a directory to store dem files
-   mkdir -p media/dem
-
-   # Downsample the terrain file and make sure it is the right format at the output
-   gdalwarp -ts 129 129 /tmp/gazebo/mtsthelens.dem /tmp/gazebo/media/dem/mtsthelens_129.tiff
-   gdal_translate -of USGSDEM /tmp/gazebo/media/dem/mtsthelens_129.tiff /tmp/gazebo/media/dem/mtsthelens_129.dem
-
-   # Remove temporary files
-   rm -f /tmp/gazebo/media/dem/mtsthelens_129.tiff /tmp/gazebo/media/dem/mtsthelens_129.dem.aux.xml /tmp/gazebo/mtsthelens.dem /tmp/gazebo/mtsthelens_after.zip
-
-   # Get the world definition for the terrain
-   wget https://github.com/osrf/gazebo_tutorials/raw/master/dem/files/volcano.world
-
-   # Tell Gazebo where to look for the terrain file and launch to double check that it worked
-   # Be sure of sourcing gazebo setup.sh in your own installation path
-   source /usr/share/gazebo/setup.sh
-   GAZEBO_RESOURCE_PATH="$GAZEBO_RESOURCE_PATH:/tmp/gazebo" gazebo /tmp/gazebo/volcano.world
-   ```
-
-2. Follow steps 2-4 from above.
-
-## 9. Launch simulation
-
-### 9.1. Set home position
+### 8.1. Set home position
 
 ``` sh
 # Source home position
+# Get into the PX4 project folder
+cd ~/Momentum/PX4/PX4-Autopilot
+source set_home.sh
+
+# or do this from anywhere
 # https://dev.px4.io/master/en/simulation/gazebo.html#set-custom-takeoff-location
-export PX4_HOME_LAT= 42.356219 # Deg
-export PX4_HOME_LON=-71.100801 # Deg
-export PX4_HOME_ALT= 9.35      # Meters
+export PX4_HOME_LAT=0 # Deg
+export PX4_HOME_LON=0 # Deg
+export PX4_HOME_ALT=0 # Meters
 ```
 
-### 9.2. Set firmware parameters
+### 8.2. Launch PX4 with Gazebo
+
+Summary of [PX4 simulation using Gazebo](https://dev.px4.io/master/en/simulation/gazebo.html):
+
+Launching PX4 and Gazebo (the `make...` command) will start the real-time simulation. From here, you can interact with the drone, send missions, move it in the world, and peek at the messages sent in and out of Gazebo.
+
+```sh
+# Get into the PX4 project folder
+cd ~/Momentum/PX4/PX4-Autopilot
+
+# Launch PX4 and Gazebo with the lidar and 2D terrain
+make px4_sitl gazebo_iris_lmlidar__terrain2d
+
+# OR Launch PX4 and Gazebo with the lidar and 3D terrain
+make px4_sitl gazebo_iris_lmlidar__terrain3d
+
+# OR Launch PX4 and Gazebo with the lidar and default terrain
+make px4_sitl gazebo_iris_lmlidar
+```
+
+### 8.3. Set PX4 firmware parameters
+
+The PX4 firmware parameters set the constants used in the control laws of the autopilot. The following shows how to set the maximum velocities for the drone and load/save these parameters to file, as well as reset them to defaults.
 
 ``` sh
-# Run from the shell (with pxh>)
+# Run from the shell (with pxh>) after launching PX4
 # Set params manually
 # https://dev.px4.io/master/en/advanced/parameter_reference.html
 param set MPC_Z_VEL_MAX_DN 1.0 # m/s, max vertical velocity down
@@ -329,61 +409,46 @@ param save # Optionally save params (not done automatically with load)
 param reset_all
 ```
 
-### 9.3. Launch PX4 with Gazebo
-
-Summary of [PX4 simulation using Gazebo](https://dev.px4.io/master/en/simulation/gazebo.html):
-
-```sh
-# Get into the PX4 project folder
-cd /path/to/PX4-Autopilot
-
-# Launch PX4 and Gazebo with the lidar and default terrain
-make px4_sitl gazebo_iris_lmlidar
-
-# OR Launch PX4 and Gazebo with the lidar and 2D terrain
-make px4_sitl gazebo_iris_lmlidar__terrain2d
-
-# OR Launch PX4 and Gazebo with the lidar and 3D terrain
-make px4_sitl gazebo_iris_lmlidar__terrain3d
-```
-
-### 9.4. OPTIONAL Launch PX4 with jMAVSim (instead of Gazebo)
+### 8.4. OPTIONAL Launch PX4 with jMAVSim (instead of Gazebo)
 
 Summary of [PX4 simulation with jMAVSim](https://dev.px4.io/master/en/simulation/jmavsim.html):
 
 ``` sh
 # Get into the PX4 project folder
-cd /path/to/PX4-Autopilot
+cd ~/Momentum/PX4/PX4-Autopilot
 
 # Launch PX4 and jMAVSim
 make px4_sitl jmavsim
 ```
 
-### 9.5. OPTIONAL Launch QGroundControl
+### 8.5. OPTIONAL Launch QGroundControl
 
 Summary of [QGRoundControl installation instructions](https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html):
 
 ``` sh
+# Get into the project home directory
+cd ~/Momentum/
+
 # Launch QGroundControl
 `./QGroundControl.AppImage` # (or double-click)
 ```
 
-## 10. Run mission file
+## 9. Run a mission file
 
 ``` sh
 # Get into the folder with the mission file
-cd path/to/mission_file.py
+cd ~/Momentum/lm-mit-momentum/demos
 
 # Run mission file
-python3 mission_file.py
+python3 demo_mission.py
 ```
 
-## 11. Query sensor values using py3gazebo - GPS Example
+## 10. Query sensor values using py3gazebo - GPS Example
 
 Get the available Gazebo topics and get the information on the topic of interest (take note of the message type). Gazebo and PX4 have to be running for this to work.
 
 ``` sh
-gz topic -l
+gz topic -l | grep gps
 # ...
 # '/gazebo/default/iris/gps0/link/gps'
 # ...
@@ -483,16 +548,28 @@ if __name__ == "__main__":
     loop.run_until_complete(run())
 ```
 
-## 12. Getting started with MAVSDK
+## 11. Getting started with MAVSDK
 
 Follow the [MAVSDK quickstart guide](https://mavsdk.mavlink.io/develop/en/python/quickstart.html) to get a headstart on using MAVSDK with your setup. The [API reference](http://mavsdk-python-docs.s3-website.eu-central-1.amazonaws.com/) is useful for understanding how the examples work and for figuring out how to write your own code.
 
-Download MAVSDK examples
+### 11.1. Download MAVSDK examples
 
 ``` sh
 # Install subversion if not already installed
 sudo apt install subversion
 
+# Get into project home directory
+cd ~/Momentum
+
 # Download MAVSDK Python examples from the GitHub repository
 svn checkout https://github.com/mavlink/MAVSDK-Python/trunk/examples
+```
+
+### 11.2. Run a MAVSDK example (PX4 and Gazebo have to be running)
+
+``` sh
+# Step into the examples folder
+cd ~/Momentum/examples
+
+python3 takeoff_and_land.py
 ```
