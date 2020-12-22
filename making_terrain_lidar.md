@@ -1,12 +1,17 @@
 # How to make your own terrain <!-- omit in toc -->
-<!-- TOC and section numbers automatically generated, do not manually edit -->
-- [1. Create a terrain based on a heightmap](#1-create-a-terrain-based-on-a-heightmap)
-- [2. Create a terrain based on real world terrain](#2-create-a-terrain-based-on-real-world-terrain)
-<!-- TOC and section numbers automatically generated, do not manually edit -->
 
 You should **not** need to create your own terrain for this project, so this section will be brief.
 
-## 1. Create a terrain based on a heightmap
+<!-- TOC and section numbers automatically generated, do not manually edit -->
+- [1. Terrain](#1-terrain)
+  - [1.1. Create a terrain based on a heightmap](#11-create-a-terrain-based-on-a-heightmap)
+  - [1.2. Create a terrain based on real world terrain](#12-create-a-terrain-based-on-real-world-terrain)
+- [2. LiDAR](#2-lidar)
+<!-- TOC and section numbers automatically generated, do not manually edit -->
+
+## 1. Terrain
+
+### 1.1. Create a terrain based on a heightmap
 
 This [video](https://vimeo.com/58409707) shows the steps.
 
@@ -23,7 +28,7 @@ In summary:
 3. Modify `cmake/sitl_target.cmake` with the name of your world
 4. Add your terrain files to the script to place them in right places or do so manually
 
-## 2. Create a terrain based on real world terrain
+### 1.2. Create a terrain based on real world terrain
 
 Summary of [Gazebo DEMs Tutorial](http://gazebosim.org/tutorials/?tut=dem):
 
@@ -65,3 +70,7 @@ Summary of [Gazebo DEMs Tutorial](http://gazebosim.org/tutorials/?tut=dem):
    ```
 
 2. Follow steps 2-4 from above.
+
+## 2. LiDAR
+
+*Under construction.*

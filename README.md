@@ -1,4 +1,12 @@
 # Getting Started <!-- omit in toc -->
+
+If you are viewing this file offline, the most up to date version of these instructions is located in the [project GitHub](https://github.com/katabeta/lm-mit-momentum).
+
+**NOTES:**
+
+1. Unless otherwise specified, all instructions are to be entered into the terminal in your Ubuntu installation.
+2. Commands that start with `sudo` will require your user password. Using sudo invokes superuser security privileges and is akin to running an application as an administrator in Windows.
+
 <!-- TOC and section numbers automatically generated, do not manually edit -->
 - [1. Install Ubuntu 18.04 LTS or 20.04 LTS](#1-install-ubuntu-1804-lts-or-2004-lts)
   - [1.1. Basic steps to install Ubuntu outside of a Virtual Machine](#11-basic-steps-to-install-ubuntu-outside-of-a-virtual-machine)
@@ -13,7 +21,7 @@
 - [6. Install py3gazebo](#6-install-py3gazebo)
   - [6.1. How to find sensor topic name, message type, and get sample output](#61-how-to-find-sensor-topic-name-message-type-and-get-sample-output)
 - [7. Adding LM-provided LiDAR and terrain](#7-adding-lm-provided-lidar-and-terrain)
-  - [7.1. Creating your own terrain](#71-creating-your-own-terrain)
+  - [7.1. Creating your own terrain and LiDAR](#71-creating-your-own-terrain-and-lidar)
 - [8. Launch simulation](#8-launch-simulation)
   - [8.1. Set home position](#81-set-home-position)
   - [8.2. Launch PX4 with Gazebo](#82-launch-px4-with-gazebo)
@@ -26,13 +34,6 @@
   - [11.1. Download MAVSDK examples](#111-download-mavsdk-examples)
   - [11.2. Run a MAVSDK example (PX4 and Gazebo have to be running)](#112-run-a-mavsdk-example-px4-and-gazebo-have-to-be-running)
 <!-- TOC and section numbers automatically generated, do not manually edit -->
-
-If you are viewing this file offline, the most up to date version of these instructions is located in the [project GitHub](https://github.com/katabeta/lm-mit-momentum).
-
-**NOTES:**
-
-1. Unless otherwise specified, all instructions are to be entered into the terminal in your Ubuntu installation.
-2. Commands that start with `sudo` will require your user password. Using sudo invokes superuser security privileges and is akin to running an application as an administrator in Windows.
 
 ## 1. Install Ubuntu 18.04 LTS or 20.04 LTS
 
@@ -58,7 +59,7 @@ The software required for this project runs and is supported only in Ubuntu 18.0
 1. [Install VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 2. [Download an Ubuntu image](https://ubuntu.com/download/desktop)
 3. [Verify image download is not corrupted](https://ubuntu.com/tutorials/how-to-verify-ubuntu#1-overview)
-4. [Install Ubuntu in Virtual Box](https://brb.nci.nih.gov/seqtools/installUbuntu.html)
+4. [Install Ubuntu in VirtualBox](https://brb.nci.nih.gov/seqtools/installUbuntu.html)
 
 ## 2. Install VS Code IDE
 
@@ -81,13 +82,17 @@ sudo sh -c 'echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.micr
 sudo apt-get install apt-transport-https
 sudo apt-get update
 sudo apt-get install code
+
+# Step out of the temp folder and remove it
+cd ..
+rm -rf temp
 ```
 
 ## 3. Get Gazebo and PX4
 
 PX4 is industry-standard autopilot software for hobbyist drone applications. It provides easy access to high quality control laws for a variety of drones, including in simulation. For the purposes of this project, this software will allow the user to simply set waypoints, while the PX4 software performs all of the necessary calculations to control and interface with the motors to get the drone to the next waypoint.
 
-Gazebo is similarly positioned in the robotics simulation world and is heavily used with ROS (Robot Operating System, not used in this project). Gazebo enables real time physics simulation, sensor and terrain integration, and provides visual feedback for the user.
+Gazebo is similarly positioned in the robotics simulation world and is heavily used with ROS (Robot Operating System, not used in this project). Gazebo enables real-time physics simulation, sensor and terrain integration, and provides visual feedback for the user.
 
 ### 3.1. Clone PX4 and install Gazebo
 
@@ -121,7 +126,7 @@ Summary of [PX4 simulation with Gazebo](https://dev.px4.io/master/en/simulation/
 # Get into the PX4 project directory
 cd ~/Momentum/PX4/PX4-Autopilot
 
-# Make the project with default vehicle target and gazebo simulation target
+# Make the project with default drone target and gazebo simulation target
 make px4_sitl gazebo
 ```
 
@@ -220,6 +225,7 @@ find ./ -type f -exec sed -i 's/asyncio.async/asyncio.ensure_future/g' {} \;
 GAZEBO_HOME=/usr/include/gazebo-11
 protoc --proto_path=$GAZEBO_HOME/gazebo/msgs --python_out=pygazebo/msg $GAZEBO_HOME/gazebo/msgs/*proto
 
+# Open setup.py for editing
 gedit setup.py
 ```
 
@@ -247,15 +253,13 @@ sudo python3 setup.py install
 
 ### 6.1. How to find sensor topic name, message type, and get sample output
 
-The following commands only work with Gazebo running and vehicle spawned in the simulation.
+The following commands only work with Gazebo running and drone spawned in the simulation.
 
 Get a list of all gazebo topics, filter for the word `scan`
 
 ``` sh
 gz topic -l | grep scan
-# ...
 # /gazebo/default/iris_lmlidar/lmlidar/link/lmlidar/scan
-#...
 ```
 
 Get the details on the lidar topic specifically
@@ -274,7 +278,7 @@ gz topic -i /gazebo/default/iris_lmlidar/lmlidar/link/lmlidar/scan
 Echo the topic to the terminal - this will spam to your terminal, so press `Ctrl+C` to stop.
 
 ``` sh
-gz topic -e '/gazebo/default/iris_lmlidar/lmlidar/link/lmlidar/scan'
+gz topic -e /gazebo/default/iris_lmlidar/lmlidar/link/lmlidar/scan
 # time {
 #   sec: 12
 #   nsec: 404000000
@@ -348,13 +352,15 @@ Based on this [forum post](https://discuss.px4.io/t/create-custom-model-for-sitl
       gazebo_iris_lmlidar__terrain3d
       ```
 
-### 7.1. Creating your own terrain
+### 7.1. Creating your own terrain and LiDAR
 
-You should **not** need to create your own terrain for this project. If you are still looking for instruction on making your own terrain, refer to [making_terrain.md](https://github.com/katabeta/lm-mit-momentum/blob/master/making_terrain.md).
+You should **not** need to create your own terrain or LiDAR for this project. If you are still looking for instruction on making your own assets, refer to [making_terrain_lidar.md](https://github.com/katabeta/lm-mit-momentum/blob/master/making_terrain_lidar.md).
 
 ## 8. Launch simulation
 
 ### 8.1. Set home position
+
+Setting the home position will ensure that Gazebo, PX4, and the Python mission are on the same page about where the drone is supposed to be.
 
 ``` sh
 # Source home position
@@ -362,7 +368,7 @@ You should **not** need to create your own terrain for this project. If you are 
 cd ~/Momentum/PX4/PX4-Autopilot
 source set_home.sh
 
-# or do this from anywhere
+# or do this from anywhere by hand
 # https://dev.px4.io/master/en/simulation/gazebo.html#set-custom-takeoff-location
 export PX4_HOME_LAT=0 # Deg
 export PX4_HOME_LON=0 # Deg
@@ -449,9 +455,7 @@ Get the available Gazebo topics and get the information on the topic of interest
 
 ``` sh
 gz topic -l | grep gps
-# ...
 # '/gazebo/default/iris/gps0/link/gps'
-# ...
 
 gz topic -i /gazebo/default/iris/gps0/link/gps
 # Type: gazebo.msgs.GPS
