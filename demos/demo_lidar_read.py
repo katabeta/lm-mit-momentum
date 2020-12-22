@@ -33,7 +33,7 @@ class GazeboMessageSubscriber:
 
         if connected: 
             # info from gz topic -l, gz topic -i arg goes here
-            self.gps_subscriber = self.manager.subscribe('/gazebo/default/iris_rplidar/rplidar/link/laser/scan', 'gazebo.msgs.LaserScanStamped', self.LaserScanStamped_callback)
+            self.gps_subscriber = self.manager.subscribe('/gazebo/default/iris_lmlidar/lmlidar/link/lmlidar/scan', 'gazebo.msgs.LaserScanStamped', self.LaserScanStamped_callback)
 
             await self.gps_subscriber.wait_for_connection()
             self.running = True
@@ -60,7 +60,7 @@ class GazeboMessageSubscriber:
 async def run():
     gz_sub = GazeboMessageSubscriber(HOST, PORT)
     asyncio.ensure_future(gz_sub.connect())
-
+    gps_val = await gz_sub.get_LaserScanStamped()
     # Simulate doing stuff and polling for the gps values only when needed
     start = time.time()
     current_time = 0
