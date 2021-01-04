@@ -1,6 +1,7 @@
 #!/bin/bash
 # Copy world assets
 cp -f worlds/*.world ../PX4/PX4-Autopilot/Tools/sitl_gazebo/worlds/
+mkdir -p ~/.gazebo/models # Make sure that the models folder exists before trying to copy into it
 cp -af ./worlds/models/terrain3d/ ~/.gazebo/models
 cp -af ./worlds/models/terrain2d/ ~/.gazebo/models
 
