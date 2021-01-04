@@ -70,22 +70,11 @@ Summary of [VS Code setup instructions](https://code.visualstudio.com/docs/setup
 ``` sh
 # Make the home directory for the project and step into it.
 # You may install your software in a different directory, but then take care to change your home directory when following the instructions.
-mkdir -p ~/Momentum/temp
-cd ~/Momentum/temp
+mkdir -p ~/Momentum
+cd ~/Momentum
 
-# Install repository and signing key
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
-sudo sh -c 'echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-
-# Install VS Code
-sudo apt-get install apt-transport-https
-sudo apt-get update
-sudo apt-get install code
-
-# Step out of the temp folder and remove it
-cd ..
-rm -rf temp
+# Install VS Code from snap
+sudo snap install --classic code
 
 # Launch VS Code from current terminal directory and put it in the background
 code . &
@@ -102,7 +91,7 @@ Gazebo is similarly positioned in the robotics simulation world and is heavily u
 Summary of [PX4 and Gazebo setup guide for ubuntu](https://dev.px4.io/master/en/setup/dev_env_linux_ubuntu.html):
 
 ``` sh
-# Return to home
+# Return to home project directory
 cd ~/Momentum
 
 # Make home directory for PX4
