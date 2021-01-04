@@ -215,7 +215,7 @@ sudo apt-get install 2to3
 2to3 -w *.py
 
 # Replace all instances of deprecated `asyncio.async` with `asyncio.ensure_future`
-find ./ -type f -exec sed -i 's/asyncio.async/asyncio.ensure_future/g' {} \;
+sudo find ./ -type f -exec sed -i 's/asyncio.async/asyncio.ensure_future/g' {} \;
 
 # Update proto definitions from the root of the py3gazebo project
 GAZEBO_HOME=/usr/include/gazebo-11
