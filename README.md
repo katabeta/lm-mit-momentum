@@ -236,6 +236,10 @@ Based on this [forum post](https://discuss.px4.io/t/create-custom-model-for-sitl
 
     # Clone project
     git clone https://github.com/katabeta/lm-mit-momentum.git
+
+    # Check directory tree
+    sudo apt-get install tree
+    tree -L 2
     ```
 
    - After downloading, your workspace directory should look like this (*otherwise the script will fail*):
@@ -245,18 +249,26 @@ Based on this [forum post](https://discuss.px4.io/t/create-custom-model-for-sitl
          ├── lm-mit-momentum
          │   ├── ...
          ├── PX4
-         │   ├── PX4-Autopilot
-         │   ├── requirements.txt
-         │   └── ubuntu.sh
+         │   └── PX4-Autopilot
          ├── py3gazebo
          │   └── ...
          └── ...
         ```
 
-2. Run the bash script in the downloaded folder (with `bash lm_setup.sh`)
-   - If you see the following printed to the terminal, the script has succeded:
+2. Run the bash script in the downloaded folder
 
-      ```sh
+    ``` sh
+    # Step into the lm directory
+    cd lm-mit-momentum
+
+    # Add execution permissions to the script and execute
+    chmod +x lm_setup.sh
+    sudo ./lm_setup.sh
+    ```
+
+   - If you see the following printed to the terminal and no error messages, the script has succeded:
+
+      ``` sh
       gazebo_iris_lmlidar__terrain2d
       gazebo_iris_lmlidar__terrain3d
       ```
