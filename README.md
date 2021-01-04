@@ -6,6 +6,7 @@ If you are viewing this file offline, the most up to date version of these instr
 
 1. Unless otherwise specified, all instructions are to be entered into the terminal in your Ubuntu installation.
 2. Commands that start with `sudo` will require your user password. Using sudo invokes superuser security privileges and is akin to running an application as an administrator in Windows.
+3. There is a [playlist](https://youtube.com/playlist?list=PLvn3cENh89AszwCOFpApcvQNTHO7Ap-us) showing successful execution of these commands.
 
 <!-- TOC and section numbers automatically generated, do not manually edit -->
 - [1. Install Ubuntu 18.04 LTS or 20.04 LTS](#1-install-ubuntu-1804-lts-or-2004-lts)
@@ -210,6 +211,7 @@ git clone https://github.com/wil3/py3gazebo.git
 cd py3gazebo
 
 # Run 2to3 on the project
+sudo apt-get install 2to3
 2to3 -w *.py
 
 # Replace all instances of deprecated `asyncio.async` with `asyncio.ensure_future`
