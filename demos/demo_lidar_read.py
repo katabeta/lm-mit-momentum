@@ -60,7 +60,7 @@ class GazeboMessageSubscriber:
 async def run():
     gz_sub = GazeboMessageSubscriber(HOST, PORT)
     asyncio.ensure_future(gz_sub.connect())
-    gps_val = await gz_sub.get_LaserScanStamped()
+    lsr_val = await gz_sub.get_LaserScanStamped()
     # Simulate doing stuff and polling for the gps values only when needed
     start = time.time()
     current_time = 0
@@ -68,8 +68,8 @@ async def run():
     while (current_time < 20):
         current_time = round(time.time() - start)
         if(current_time % 5 == 0 and last_time < current_time):
-            gps_val = await gz_sub.get_LaserScanStamped()
-            print(gps_val)
+            lsr_val = await gz_sub.get_LaserScanStamped()
+            print(lsr_val)
             last_time = current_time
         if(current_time % 1  == 0 and last_time < current_time):
             print(current_time)
