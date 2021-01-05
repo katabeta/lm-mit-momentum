@@ -15,6 +15,7 @@ cp -f cmake/sitl_target.cmake ../PX4/PX4-Autopilot/platforms/posix/cmake/sitl_ta
 
 # Copy py3gazebo setup file
 cp -f py3gazebo_setup/setup.py ../py3gazebo/setup.py
+cp -f py3gazebo_setup/pygazebo.py ../py3gazebo/pygazebo/pygazebo.py
 
 # Copy other helpful files
 cp scritps/set_home.sh ../PX4/PX4-Autopilot/

@@ -287,7 +287,7 @@ Because there were specific changes required, the `lm_setup.sh` script had to co
 cd ~/Momentum/py3gazebo
 
 # Install the Python library
-sudo python3 setup.py install
+pip3 install .
 ```
 
 ## 9. Launch simulation

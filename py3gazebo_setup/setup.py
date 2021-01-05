@@ -42,8 +42,7 @@ setup(
     packages=[
         'pygazebo',
         'pygazebo.msg',
-        'pygazebo.msg.v11',
-        'pygazebo.msg.v9',
+        'pygazebo.msg.v11'
     ],
     package_dir={'pygazebo': 'pygazebo'},
     include_package_data=True,
