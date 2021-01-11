@@ -23,7 +23,13 @@ The mission is written using Python and asyncronous calls to the [MAVSDK library
 
 Gazebo is the software that handles the sensor simulation and is the software that publishes the returns. The internal structure of the communication is implemented using [Protocol Buffers](https://developers.google.com/protocol-buffers) and you can listen for the messages using external software. This is what [Py3Gazebo](https://github.com/katabeta/lm-mit-momentum#8-install-py3gazebo) is for in our case.
 
-If you have successfully installed Py3Gazebo, you should be able to run the file [demos/demo_lidar_read.py](https://github.com/katabeta/lm-mit-momentum/blob/master/demos/demo_lidar_read.py), which will print out LiDAR readings every 5 seconds for 20 seconds total. You must have PX4 and Gazebo running with the LiDAR model enabled.
+If you have successfully installed Py3Gazebo, you should be able to run the file [tutorial/demos/demo_lidar_read.py](https://github.com/katabeta/lm-mit-momentum/blob/master/tutorial/demos/demo_lidar_read.py), which will print out LiDAR readings every 5 seconds for 20 seconds total. You must have PX4 and Gazebo running with the LiDAR model enabled.
+
+To test your knowledge and understanding please read along the [LaserScan tutorial](https://github.com/katabeta/lm-mit-momentum/blob/master/tutorial/tutorial_lidar.py) and help make it complete. By the end of the tutorial you should be more familiar with:
+* Checking and acquiring more information on the published data from Gazebo
+* Looking at a "snapshot" from the published data from Gazebo
+* The structure of the 'LaserScan' topic
+* Iterating through the known output of our 'LaserScan' topic
 
 ## 3. How do I tell the drone to go in a specific direction?
 
