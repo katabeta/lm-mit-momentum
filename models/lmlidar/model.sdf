@@ -33,7 +33,7 @@
 
         <ray>
           <scan>
-            <!--  Scan from -30 to 30 degs with 0 deg facing directly in front of vehicle -->
+            <!--  Scan from -30 to 30 degs at 3 deg increments (20 samples) with 0 deg facing directly in front of vehicle -->
             <horizontal>
               <samples>20</samples>
               <resolution>1</resolution>
@@ -41,7 +41,7 @@
               <max_angle>0.5236</max_angle>
             </horizontal>
 
-            <!-- Scan in front and below the vehicle -->
+            <!-- Scan from +0 to -90 degs (in front and below the vehicle) at 10 deg increments (9 samples) -->
             <vertical>
               <samples>9</samples>
               <resolution>1</resolution>
@@ -50,12 +50,14 @@
             </vertical>
           </scan>
 
+          <!-- Reported scan range can go from 0.2m to 10m, with a resolution of 0.05m, where a reading of inf indicates a ray that did not return -->
           <range>
             <min>0.2</min>
             <max>10</max>
             <resolution>0.05</resolution>
           </range>
 
+          <!-- This LiDAR has a gaussian noise profile with mu = 0 and sigma = 0.01-->
           <noise>
             <type>gaussian</type>
             <mean>0.0</mean>
