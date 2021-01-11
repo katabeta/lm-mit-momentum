@@ -7,6 +7,7 @@ If you are viewing this file offline, the most up to date version of these instr
 1. Unless otherwise specified, all instructions are to be entered into the terminal in your Ubuntu installation.
 2. Commands that start with `sudo` will require your user password. Using sudo invokes superuser security privileges and is akin to running an application as an administrator in Windows.
 3. There is a [playlist](https://youtube.com/playlist?list=PLvn3cENh89AszwCOFpApcvQNTHO7Ap-us) showing successful execution of these commands.
+4. If you have specific questions that are not answered by this document, check out the constantantly updating [Q&A](https://github.com/katabeta/lm-mit-momentum/blob/master/QA.md).
 
 ## Table of Contents <!-- omit in toc -->
 <!-- TOC and section numbers automatically generated, do not manually edit -->
