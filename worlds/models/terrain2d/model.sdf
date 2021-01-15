@@ -7,8 +7,8 @@
         <geometry>
           <heightmap>
             <uri>model://terrain2d/media/test_terrain_2d.png</uri>
-            <size>40 40 5</size>
-            <pos>0 0 -5</pos>
+            <size>80 80 5</size>
+            <pos>0 0 0</pos>
           </heightmap>
         </geometry>
       </collision>
@@ -40,8 +40,8 @@
               <fade_dist>5</fade_dist>
             </blend>
             <uri>model://terrain2d/media/test_terrain_2d.png</uri>
-            <size>40 40 5</size>
-            <pos>0 0 -5</pos>
+            <size>80 80 5</size>
+            <pos>0 0 0</pos>
           </heightmap>
         </geometry>
       </visual>
