@@ -21,21 +21,22 @@ If you are viewing this file offline, the most up to date version of these instr
 - [4. OPTIONAL Install QGroundControl](#4-optional-install-qgroundcontrol)
   - [4.1. Fix problem where PX4 running Gazebo can't connect to QGroundControl](#41-fix-problem-where-px4-running-gazebo-cant-connect-to-qgroundcontrol)
 - [5. Install MAVSDK](#5-install-mavsdk)
-- [6. Download py3gazebo](#6-download-py3gazebo)
-- [7. Adding LM-provided LiDAR and terrain](#7-adding-lm-provided-lidar-and-terrain)
-  - [7.1. Creating your own terrain and LiDAR](#71-creating-your-own-terrain-and-lidar)
-- [8. Install py3gazebo](#8-install-py3gazebo)
-- [9. Launch simulation](#9-launch-simulation)
-  - [9.1. Set home position](#91-set-home-position)
-  - [9.2. Launch PX4 with Gazebo](#92-launch-px4-with-gazebo)
-  - [9.3. Set PX4 firmware parameters](#93-set-px4-firmware-parameters)
-  - [9.4. How to find sensor topic name, message type, and get sample output](#94-how-to-find-sensor-topic-name-message-type-and-get-sample-output)
-  - [9.5. OPTIONAL Launch QGroundControl](#95-optional-launch-qgroundcontrol)
-- [10. Run a mission file](#10-run-a-mission-file)
-- [11. Query sensor values using py3gazebo - GPS Example](#11-query-sensor-values-using-py3gazebo---gps-example)
-- [12. Getting started with MAVSDK](#12-getting-started-with-mavsdk)
-  - [12.1. Download MAVSDK examples](#121-download-mavsdk-examples)
-  - [12.2. Run a MAVSDK example (PX4 and Gazebo have to be running)](#122-run-a-mavsdk-example-px4-and-gazebo-have-to-be-running)
+- [6. Install navpy and numpy](#6-install-navpy-and-numpy)
+- [7. Download py3gazebo](#7-download-py3gazebo)
+- [8. Adding LM-provided LiDAR and terrain](#8-adding-lm-provided-lidar-and-terrain)
+  - [8.1. Creating your own terrain and LiDAR](#81-creating-your-own-terrain-and-lidar)
+- [9. Install py3gazebo](#9-install-py3gazebo)
+- [10. Launch simulation](#10-launch-simulation)
+  - [10.1. Set home position](#101-set-home-position)
+  - [10.2. Launch PX4 with Gazebo](#102-launch-px4-with-gazebo)
+  - [10.3. Set PX4 firmware parameters](#103-set-px4-firmware-parameters)
+  - [10.4. How to find sensor topic name, message type, and get sample output](#104-how-to-find-sensor-topic-name-message-type-and-get-sample-output)
+  - [10.5. OPTIONAL Launch QGroundControl](#105-optional-launch-qgroundcontrol)
+- [11. Run a mission file](#11-run-a-mission-file)
+- [12. Query sensor values using py3gazebo - GPS Example](#12-query-sensor-values-using-py3gazebo---gps-example)
+- [13. Getting started with MAVSDK](#13-getting-started-with-mavsdk)
+  - [13.1. Download MAVSDK examples](#131-download-mavsdk-examples)
+  - [13.2. Run a MAVSDK example (PX4 and Gazebo have to be running)](#132-run-a-mavsdk-example-px4-and-gazebo-have-to-be-running)
 <!-- TOC and section numbers automatically generated, do not manually edit -->
 
 ## 1. Install Ubuntu 18.04 LTS or 20.04 LTS
@@ -200,7 +201,16 @@ Summary of [Python MAVSDK installation guide](https://github.com/mavlink/MAVSDK-
 pip3 install mavsdk
 ```
 
-## 6. Download py3gazebo
+## 6. Install navpy and numpy
+
+Navpy provides coordinate system conversion functions
+
+``` sh
+pip3 install numpy
+pip3 install navpy
+```
+
+## 7. Download py3gazebo
 
 Similar to MAVSDK, py3gazebo provides Python hooks to interface with Gazebo and its messages. This software is necessary in this project to read sensor data from Gazebo.
 
@@ -226,7 +236,7 @@ protoc --proto_path=$GAZEBO_HOME/gazebo/msgs --python_out=pygazebo/msg $GAZEBO_H
 
 The Python library is not yet installed. LM is providing an updated `setup.py` script that will be copied in the next step and there will be a prompt to install the library in [section 8](#8-install-py3gazebo).
 
-## 7. Adding LM-provided LiDAR and terrain
+## 8. Adding LM-provided LiDAR and terrain
 
 Based on this [forum post](https://discuss.px4.io/t/create-custom-model-for-sitl/6700/2).
 
@@ -275,11 +285,11 @@ Based on this [forum post](https://discuss.px4.io/t/create-custom-model-for-sitl
       gazebo_iris_lmlidar__terrain3d
       ```
 
-### 7.1. Creating your own terrain and LiDAR
+### 8.1. Creating your own terrain and LiDAR
 
 You should **not** need to create your own terrain or LiDAR for this project. If you are still looking for instruction on making your own assets, refer to [making_terrain_lidar.md](https://github.com/katabeta/lm-mit-momentum/blob/master/making_terrain_lidar.md).
 
-## 8. Install py3gazebo
+## 9. Install py3gazebo
 
 Because there were specific changes required, the `lm_setup.sh` script had to copy a file over before you could install the library. To install the library, do the following:
 
@@ -291,9 +301,9 @@ cd ~/Momentum/py3gazebo
 pip3 install .
 ```
 
-## 9. Launch simulation
+## 10. Launch simulation
 
-### 9.1. Set home position
+### 10.1. Set home position
 
 Setting the home position will ensure that Gazebo, PX4, and the Python mission are on the same page about where the drone is supposed to be.
 
@@ -311,7 +321,7 @@ export PX4_HOME_LON=0 # Deg
 export PX4_HOME_ALT=0 # Meters
 ```
 
-### 9.2. Launch PX4 with Gazebo
+### 10.2. Launch PX4 with Gazebo
 
 Summary of [PX4 simulation using Gazebo](https://dev.px4.io/master/en/simulation/gazebo.html):
 
@@ -331,7 +341,7 @@ make px4_sitl gazebo_iris_lmlidar__terrain3d
 make px4_sitl gazebo_iris_lmlidar
 ```
 
-### 9.3. Set PX4 firmware parameters
+### 10.3. Set PX4 firmware parameters
 
 The PX4 firmware parameters set the constants used in the control laws of the autopilot. The following shows how to set the maximum velocities for the drone and load/save these parameters to file, as well as reset them to defaults.
 
@@ -351,7 +361,7 @@ param save # Optionally save params (not done automatically with load)
 param reset_all
 ```
 
-### 9.4. How to find sensor topic name, message type, and get sample output
+### 10.4. How to find sensor topic name, message type, and get sample output
 
 The following commands only work with Gazebo running and drone spawned in the simulation.
 
@@ -418,7 +428,7 @@ gz topic -e /gazebo/default/iris_lmlidar/lmlidar/link/lmlidar/scan
 
 ```
 
-### 9.5. OPTIONAL Launch QGroundControl
+### 10.5. OPTIONAL Launch QGroundControl
 
 Summary of [QGRoundControl installation instructions](https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html):
 
@@ -430,7 +440,7 @@ cd ~/Momentum/
 ./QGroundControl.AppImage # (or double-click)
 ```
 
-## 10. Run a mission file
+## 11. Run a mission file
 
 ``` sh
 # Get into the folder with the mission file
@@ -440,7 +450,7 @@ cd ~/Momentum/lm-mit-momentum/demos
 python3 demo_mission.py
 ```
 
-## 11. Query sensor values using py3gazebo - GPS Example
+## 12. Query sensor values using py3gazebo - GPS Example
 
 Get the available Gazebo topics and get the information on the topic of interest (take note of the message type). Gazebo and PX4 have to be running for this to work.
 
@@ -546,11 +556,11 @@ if __name__ == "__main__":
     loop.run_until_complete(run())
 ```
 
-## 12. Getting started with MAVSDK
+## 13. Getting started with MAVSDK
 
 Follow the [MAVSDK quickstart guide](https://mavsdk.mavlink.io/develop/en/python/quickstart.html) to get a headstart on using MAVSDK with your setup. The [API reference](http://mavsdk-python-docs.s3-website.eu-central-1.amazonaws.com/) is useful for understanding how the examples work and for figuring out how to write your own code.
 
-### 12.1. Download MAVSDK examples
+### 13.1. Download MAVSDK examples
 
 ``` sh
 # Install subversion if not already installed
@@ -563,7 +573,7 @@ cd ~/Momentum
 svn checkout https://github.com/mavlink/MAVSDK-Python/trunk/examples
 ```
 
-### 12.2. Run a MAVSDK example (PX4 and Gazebo have to be running)
+### 13.2. Run a MAVSDK example (PX4 and Gazebo have to be running)
 
 ``` sh
 # Step into the examples folder
