@@ -120,7 +120,7 @@ def get_world_obst(lsr_val, lla_ref_off):
   result = P_prime[1:4].T
 
   # Access using the index of the return you'd like (in the format[v1h1 .. v20h1 v1h2 .. v20h2 v1h3 .. v20h3 ...]) and index of axis x=0, y=1, z=2
-  # e.g. result[-60:-40, 0:3] gives 20 x-y-z values starting from 60 from the end and ending at 40 from the end
+  # e.g. result[-60:-40, 0:2] gives 20 x-y-z values starting from 60 from the end and ending at 40 from the end
 
   return result
 
@@ -169,33 +169,38 @@ def get_next_wp (lsr_val, lla_ref_off):
     else:
         go_to_endpoint = False
     if(not go_to_endpoint):
-        
         # These are the obstacle coordinates in world-frame.
         # Use them to determine where the obstacles are.
         # Access using the index of the return you'd like (in the format[v1h1 .. v20h1 v1h2 .. v20h2 v1h3 .. v20h3 ...]) and index of axis x=0, y=1, z=2
-        # e.g. result[-60:-40, 0:3] gives 20 x-y-z values starting from 60 from the end and ending at 40 from the end
+        # e.g. result[-60:-40, 0:2] gives 20 x-y-z values starting from 60 from the end and ending at 40 from the end
         registered_scans = get_world_obst(lsr_val, lla_ref_off) 
 
         # Moving along x-axis, so y should stay constant
         y = 0
-
-        
         ### DO NOT CHANGE ###
-
-    
 
         # TODO: set x, z using your algorithm to determine where to go next
         # This is saying that you want the drone to be at height z, at point x
         #### YOUR CODE GOES HERE ####
+        
 
+
+
+
+
+
+        speed = max_speed # Change this to the speed you want
+        x = 0 # Change this to the values output from your algorithm
+        z = 0 # Change this to the values output from your algorithm
+        
         #### YOUR CODE GOES HERE ####
     else:
         x = float("NaN")
         y = float("NaN")
         z = float("NaN")
+        speed = max_speed
 
 
-    speed = max_speed
 
     return [x, y, z, speed]
 
