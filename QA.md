@@ -18,7 +18,7 @@ The following is a constantly updating question and answer page with common ques
 
 ## 1. How do I make a mission?
 
-The objective for you is to write an altitude selection algorithm, while the rest of the mission logistics are handled for you. To get started, use the [template mission file](https://github.com/katabeta/lm-mit-momentum/blob/master/template_mission.py).
+The objective for you is to write an altitude selection algorithm, while the rest of the mission logistics are handled for you. To get started, use the [template mission using the mission construct](https://github.com/katabeta/lm-mit-momentum/blob/master/template_mission.py) or the [template mission using the goto_location construct](https://github.com/katabeta/lm-mit-momentum/blob/master/template_goto.py)
 
 If you already have something that's working or would prefer to work something out from scratch, you are welcome to continue using that as it will help with your creativity score.
 
