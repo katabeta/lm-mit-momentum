@@ -161,17 +161,15 @@ def get_next_wp (lsr_val, lla_ref_off):
     NOTE: You will be moving along the x axis.
     '''
     max_speed = 2 # m/s
-    
-    
-    # TODO: Determine if you are ready to go to the final waypoint
-    # One suggestion would be to check your x position and compare it to the endpoint's.
-    # If you are close, you can have the mission complete (the last point in the mission is
-    # the endpoint).
-    go_to_endpoint = False
 
-
+    ### DO NOT CHANGE ###
+    own_x = lsr_val.scan.world_pose.position.x + lla_ref_off[1]
+    if(own_x > 35):
+        go_to_endpoint = True
+    else:
+        go_to_endpoint = False
     if(not go_to_endpoint):
-        ### DO NOT CHANGE ###
+        
         # These are the obstacle coordinates in world-frame.
         # Use them to determine where the obstacles are.
         # Access using the index of the return you'd like (in the format[v1h1 .. v20h1 v1h2 .. v20h2 v1h3 .. v20h3 ...]) and index of axis x=0, y=1, z=2
@@ -180,14 +178,17 @@ def get_next_wp (lsr_val, lla_ref_off):
 
         # Moving along x-axis, so y should stay constant
         y = 0
+
+        
         ### DO NOT CHANGE ###
 
+    
 
         # TODO: set x, z using your algorithm to determine where to go next
         # This is saying that you want the drone to be at height z, at point x
-        x = float("NaN")
-        z = float("NaN")
+        #### YOUR CODE GOES HERE ####
 
+        #### YOUR CODE GOES HERE ####
     else:
         x = float("NaN")
         y = float("NaN")

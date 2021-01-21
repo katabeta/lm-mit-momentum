@@ -161,9 +161,10 @@ def get_next_wp (lsr_val, lla_ref_off):
     NOTE: You will be moving along the x axis.
     '''
     max_speed = 2 # m/s
-    
+
     ### DO NOT CHANGE ###
-    if(lsr_val.scan.world_pose.position.x > 35):
+    own_x = lsr_val.scan.world_pose.position.x + lla_ref_off[1]
+    if(own_x > 35):
         go_to_endpoint = True
     else:
         go_to_endpoint = False
@@ -178,7 +179,7 @@ def get_next_wp (lsr_val, lla_ref_off):
         # Moving along x-axis, so y should stay constant
         y = 0
 
-        own_x = lsr_val.scan.world_pose.position.x + lla_ref_off[1]
+        
         ### DO NOT CHANGE ###
 
     
