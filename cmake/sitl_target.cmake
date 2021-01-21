@@ -288,17 +288,3 @@ add_custom_target(list_vmd_make_targets
 	COMMENT "List of acceptable '${PX4_BOARD}' <viewer_model_debugger> targets:"
 	VERBATIM
 	)
-
-#add AGL Tracker plugin
-find_package(gazebo REQUIRED)
-include_directories(${GAZEBO_INCLUDE_DIRS})
-link_directories(${GAZEBO_LIBRARY_DIRS})
-list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
-
-message(STATUS " +++++ !! LM-MIT Momentum Path: ${LM_MOMENTUM_PATH}")
-add_library(agl_tracker SHARED 
-	${CMAKE_SOURCE_DIR}/../../lm-mit-momentum/plugin/agl_tracker.cc
-	)
-target_link_libraries(agl_tracker
-	${GAZEBO_LIBRARIES}
-	)

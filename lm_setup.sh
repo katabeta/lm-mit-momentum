@@ -23,7 +23,11 @@ cp px4_param_defaults/iris_defaults ../PX4/PX4-Autopilot/build/px4_sitl_default/
 
 # Change to the PX4 directory
 cd ../PX4/PX4-Autopilot/
+mkdir -p build/px4_sitl_default/build_gazebo
 
 # Build and check that everything worked
 make px4_sitl list_vmd_make_targets | grep -o gazebo_iris_lmlidar__terrain2d
 make px4_sitl list_vmd_make_targets | grep -o gazebo_iris_lmlidar__terrain3d
+
+# Copy the AGL Tracker plugin so Gazebo can use it
+cp ../../lm-mit-momentum/plugin/libagl_tracker.so build/px4_sitl_default/build_gazebo
