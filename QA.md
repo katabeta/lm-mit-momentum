@@ -14,6 +14,8 @@ The following is a constantly updating question and answer page with common ques
 - [8. How will my team be scored?](#8-how-will-my-team-be-scored)
 - [9. How are LiDAR ranges arranged in the LaserScan topic?](#9-how-are-lidar-ranges-arranged-in-the-laserscan-topic)
 - [10. What are the intensity returns from the LiDAR?](#10-what-are-the-intensity-returns-from-the-lidar)
+- [11. How do I log my runs in Gazebo?](#11-how-do-i-log-my-runs-in-gazebo)
+- [12. How do I make a screen recording of my run?](#12-how-do-i-make-a-screen-recording-of-my-run)
 <!-- TOC and section numbers automatically generated, do not manually edit -->
 
 ## 1. How do I make a mission?
@@ -110,3 +112,38 @@ Teams should experiment reading the LiDAR while Gazebo is running to convince th
 A typical LiDAR returns an intensity value, which is a measure of the intensity of the returned beam. This means that this return measures the reflectivity of the surface to the wavelength of the beams cast by the LiDAR.
 
 This value is irrelevant for the purposes of this competition.
+
+## 11. How do I log my runs in Gazebo?
+
+You can use the command line utility `gz log` to record a log in Gazebo.
+
+In order to start recording, you have to have Gazebo running and you have to have an available terminal window. Below are the commands you will need to start, stop, and playback your log.
+
+``` sh
+# Start recording
+gz log -d 1
+```
+
+``` sh
+# Stop recording
+gz log -d 0
+```
+
+``` sh
+# Playback your recording - note that your log directory may look different.
+gazebo -p ~/.gazebo/log/<timestamped folder>/gzserver/state.log
+```
+
+For more information, refer to Gazebo documentation on [logging utilities](http://gazebosim.org/tutorials?tut=log_filtering&cat=tools_utilities) and [log playback](http://gazebosim.org/tutorials?tut=logging_playback).
+
+## 12. How do I make a screen recording of my run?
+
+If you wish to record from Ubuntu, perform the following terminal command in order to increase the time out on screencapture.
+
+``` sh
+gsettings set org.gnome.settings-daemon.plugins.media-keys max-screencast-length 1800
+```
+
+To start the recording, press `ctrl+alt+shift+R`. Press this key combo again to stop the recording. The video in `.wedm` formate will be located in your Videos folder.
+
+If you wish to screen record from a different operating system while remote a remote terminal, please find instructions for [MacOS](https://support.apple.com/en-us/HT208721) and [Windows10](https://www.laptopmag.com/articles/how-to-video-screen-capture-windows-10).
