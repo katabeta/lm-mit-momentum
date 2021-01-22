@@ -285,9 +285,12 @@ async def run():
     lla_ref = []
     async for terrain_info in drone.telemetry.position():
         lla_ref = [terrain_info.latitude_deg, terrain_info.longitude_deg, terrain_info.absolute_altitude_m]
-        print(lla_ref)
         break
     
+    # start = navpy.lla2ned(lla_ref[0], lla_ref[1], lla_ref[2], 0, 0, 0)
+    
+    # print(f"Start:" f"{[start[1], start[0], -start[2]]}")
+
     # First mission item is to takeoff to just above our starting location
     await drone.action.set_maximum_speed(2)
     await drone.action.goto_location(lla_ref[0], lla_ref[1], lla_ref[2] + 1, 90)
