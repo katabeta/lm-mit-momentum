@@ -1,0 +1,36 @@
+syntax = "proto2";
+package gazebo.msgs;
+
+/// \ingroup gazebo_msgs
+/// \interface AGL Tracker
+/// \brief LM Momentum competition message
+
+import "pose.proto";
+import "vector3d.proto";
+import "vector2d.proto";
+import "time.proto";
+
+message AglDebug
+{
+  /// Amount of seconds elaped since take-off was detected
+  required double elapsed_time       = 1;
+
+  /// Vehicle pose relative to the Gazebo world's center.
+  required Pose vehicle_pose         = 2;
+
+  /// The Above Ground Level (AGL) value directly below the vehicle, regardless of LiDAR orientation
+  required double current_agl        = 3;
+
+  /// Average AGL value after takeoff detected
+  required double average_agl        = 4;
+
+  /// Number of tracked points describing the Terrain.
+  required Vector2d terrain_pts_sz   = 5;
+
+  /// Debug points. Array of (X,Y,Z) points describing the Terrain as a heightmap. 
+  /// Use this to verify LiDAR registration or debug motion planning algorithm
+  /// Flattened 1D array with row-major orientation, i.e.
+  /// Number of cols per row: 'terrain_pts_sz.x()'
+  /// Number of rows:         'terrain_pts_sz.y()'
+  repeated Vector3d terrain_pts      = 6;
+}

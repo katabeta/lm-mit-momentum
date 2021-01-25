@@ -15,6 +15,9 @@
     <include>
       <uri>model://terrain3d</uri>
     </include>
+    <include>
+      <uri>model://iris_lmlidar</uri>
+    </include>
     <spherical_coordinates>
       <surface_model>EARTH_WGS84</surface_model>
       <latitude_deg>0</latitude_deg>

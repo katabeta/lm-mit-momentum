@@ -21,9 +21,17 @@ cp -f py3gazebo_setup/pygazebo.py ../py3gazebo/pygazebo/pygazebo.py
 cp scritps/set_home.sh ../PX4/PX4-Autopilot/
 cp px4_param_defaults/iris_defaults ../PX4/PX4-Autopilot/build/px4_sitl_default/tmp/rootfs/
 
+# Copy AGL Plugin proto files into gazebo msgs directory
+cp plugin/agl_debug.pb.h ../PX4/PX4-Autopilot/build/px4_sitl_default/build_gazebo
+
 # Change to the PX4 directory
 cd ../PX4/PX4-Autopilot/
+mkdir -p build/px4_sitl_default/build_gazebo
 
 # Build and check that everything worked
 make px4_sitl list_vmd_make_targets | grep -o gazebo_iris_lmlidar__terrain2d
 make px4_sitl list_vmd_make_targets | grep -o gazebo_iris_lmlidar__terrain3d
+
+# Copy the AGL Tracker plugin so Gazebo can use it
+# Requires the build directory in PX4 to be populated -- error otherwise
+cp ../../lm-mit-momentum/plugin/libagl_tracker.so build/px4_sitl_default/build_gazebo

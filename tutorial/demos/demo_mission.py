@@ -33,7 +33,7 @@ async def run():
     mission_items = []
     mission_items.append(MissionItem(home_lat + 0.0001,
                                      home_lon + 0.0000,
-                                     home_alt + 5,
+                                     home_alt + 3,
                                      10,
                                      True,
                                      float('nan'),
@@ -43,7 +43,7 @@ async def run():
                                      float('nan')))
     mission_items.append(MissionItem(home_lat + 0.0001,
                                      home_lon + 0.0001,
-                                     home_alt + 5,
+                                     home_alt + 4,
                                      10,
                                      True,
                                      float('nan'),
@@ -53,7 +53,7 @@ async def run():
                                      float('nan')))
     mission_items.append(MissionItem(home_lat + 0.0000,
                                      home_lon + 0.0001,
-                                     home_alt + 5,
+                                     home_alt + 3,
                                      10,
                                      True,
                                      float('nan'),
