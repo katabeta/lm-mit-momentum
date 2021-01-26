@@ -2,6 +2,8 @@
 
 If you are viewing this file offline, the most up to date version of these instructions is located in the [project GitHub](https://github.com/katabeta/lm-mit-momentum).
 
+***ATTENTION STUDENTS:***  **THERE WAS AN UPDATE TO THE LIDAR REGISTRATION ALGORITHM**. If you are using the default templates or are relying on the LIDAR registration algorithm in them, the previous versions of these files contained a bug in the coordinate transforms. This bug has been fixed and you must update your files. Thanks to the student who pointed out the bug during office hours on 25 JAN.
+
 **NOTES:**
 
 1. Unless otherwise specified, all instructions are to be entered into the terminal in your Ubuntu installation.
@@ -230,7 +232,7 @@ sudo apt-get install 2to3
 sudo find ./ -type f -exec sed -i 's/asyncio.async/asyncio.ensure_future/g' {} \;
 
 # Update proto definitions from the root of the py3gazebo project
-GAZEBO_HOME=/usr/include/gazebo-11
+export GAZEBO_HOME=/usr/include/gazebo-11
 protoc --proto_path=$GAZEBO_HOME/gazebo/msgs --python_out=pygazebo/msg $GAZEBO_HOME/gazebo/msgs/*proto
 ```
 
@@ -332,13 +334,7 @@ Launching PX4 and Gazebo (the `make...` command) will start the real-time simula
 cd ~/Momentum/PX4/PX4-Autopilot
 
 # Launch PX4 and Gazebo with the lidar and 2D terrain
-make px4_sitl gazebo_iris_lmlidar__terrain2d
-
-# OR Launch PX4 and Gazebo with the lidar and 3D terrain
-make px4_sitl gazebo_iris_lmlidar__terrain3d
-
-# OR Launch PX4 and Gazebo with the lidar and default terrain
-make px4_sitl gazebo_iris_lmlidar
+make px4_sitl gazebo___terrain2d
 ```
 
 ### 10.3. Set PX4 firmware parameters

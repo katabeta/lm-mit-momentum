@@ -65,64 +65,68 @@ class GazeboMessageSubscriber:
 
 
 def quat_mult(quaternion1, quaternion0):
-  # Hamilton Product
-  w0 = quaternion0[0]
-  x0 = quaternion0[1]
-  y0 = quaternion0[2]
-  z0 = quaternion0[3]
-  w1 = quaternion1[0]
-  x1 = quaternion1[1]
-  y1 = quaternion1[2]
-  z1 = quaternion1[3]
-  return np.array([-x1 * x0 - y1 * y0 - z1 * z0 + w1 * w0,
+    # Hamilton Product
+    w0 = quaternion0[0]
+    x0 = quaternion0[1]
+    y0 = quaternion0[2]
+    z0 = quaternion0[3]
+    w1 = quaternion1[0]
+    x1 = quaternion1[1]
+    y1 = quaternion1[2]
+    z1 = quaternion1[3]
+    return np.array([-x1 * x0 - y1 * y0 - z1 * z0 + w1 * w0,
                     x1 * w0 + y1 * z0 - z1 * y0 + w1 * x0,
-                   -x1 * z0 + y1 * w0 + z1 * x0 + w1 * y0,
+                    -x1 * z0 + y1 * w0 + z1 * x0 + w1 * y0,
                     x1 * y0 - y1 * x0 + z1 * w0 + w1 * z0], dtype=np.float64)
 
 
 
-def get_world_obst(lsr_val, lla_ref_off):
-  # Laser returns are returned in a 1D array ordered as [v1h1 .. v20h1 v1h2 .. v20h2 v1h3 .. v20h3 ...], where v is the vertical index, and h is the horizontal index.
-  # https://math.stackexchange.com/questions/40164/how-do-you-rotate-a-vector-by-a-unit-quaternion    
-  # All quaternions expressed in the order [w, i, j, k]
+def get_world_obst(lsr_val):
+    # Laser returns are returned in a 1D array ordered as [v1h1 .. v20h1 v1h2 .. v20h2 v1h3 .. v20h3 ...], where v is the vertical index, and h is the horizontal index.
+    # https://math.stackexchange.com/questions/40164/how-do-you-rotate-a-vector-by-a-unit-quaternion    
+    # All quaternions expressed in the order [w, i, j, k]
+    # Rotation quat
+    R       = np.array([lsr_val.scan.world_pose.orientation.w,  lsr_val.scan.world_pose.orientation.x,  lsr_val.scan.world_pose.orientation.y,  lsr_val.scan.world_pose.orientation.z])
 
-  # Rotation quat
-  R       = np.array([lsr_val.scan.world_pose.orientation.w,  lsr_val.scan.world_pose.orientation.x,  lsr_val.scan.world_pose.orientation.y,  lsr_val.scan.world_pose.orientation.z])
-  
-  # Conjugate of rotation quat
-  R_prime = np.array([lsr_val.scan.world_pose.orientation.w, -lsr_val.scan.world_pose.orientation.x, -lsr_val.scan.world_pose.orientation.y, -lsr_val.scan.world_pose.orientation.z])
-  
-  # Linear displacement vector in pure quat form (0.1i is the translation from sensor frame to vehicle frame)
-  disp    = np.array([[0], [lsr_val.scan.world_pose.position.x + 0.1 + lla_ref_off[1]], [lsr_val.scan.world_pose.position.y + lla_ref_off[0]], [lsr_val.scan.world_pose.position.z - lla_ref_off[2]]])
+    # Conjugate of rotation quat
+    R_prime = np.array([lsr_val.scan.world_pose.orientation.w, -lsr_val.scan.world_pose.orientation.x, -lsr_val.scan.world_pose.orientation.y, -lsr_val.scan.world_pose.orientation.z])
 
-  # Linearly space vector describing horizontal range in radians
-  h_range = np.linspace((lsr_val.scan.angle_min + np.pi/2), (lsr_val.scan.angle_max + np.pi/2), lsr_val.scan.count, dtype=np.float64)
-  
-  # Linearly space vector describing vertical range in radians
-  v_range = np.linspace((lsr_val.scan.vertical_angle_min*-1 + np.pi/2), (lsr_val.scan.vertical_angle_max*-1 + np.pi/2), lsr_val.scan.vertical_count, dtype=np.float64)
+    # Linear displacement vector in pure quat form (0.1i is the translation from sensor frame to vehicle frame)
+    disp    = np.array([[0], [lsr_val.scan.world_pose.position.x + 0.1], [lsr_val.scan.world_pose.position.y], [lsr_val.scan.world_pose.position.z]])
+    print(disp)
 
-  # Tile and repeat variables to allow vectorized operations
-  R       = np.tile(R,          lsr_val.scan.count * lsr_val.scan.vertical_count)
-  R_prime = np.tile(R_prime,    lsr_val.scan.count * lsr_val.scan.vertical_count)  
-  disp    = np.tile(disp,       lsr_val.scan.count * lsr_val.scan.vertical_count)
-  h_range = np.tile(h_range,    lsr_val.scan.vertical_count)
-  v_range = np.repeat(v_range,  lsr_val.scan.count)
+    # Linearly space vector describing horizontal range in radians
+    h_range = np.linspace((lsr_val.scan.angle_min), (lsr_val.scan.angle_max), lsr_val.scan.count, dtype=np.float64)
 
-  # Get x, y, z components of the range readings in sensor frame and pad to assume pure quat form
-  # https://tutorial.math.lamar.edu/classes/calciii/SphericalCoords.aspx
-  P = np.array([lsr_val.scan.ranges * np.sin(v_range) * np.cos(h_range), lsr_val.scan.ranges * np.sin(v_range) * np.sin(h_range), lsr_val.scan.ranges * np.cos(v_range)])
-  P = np.concatenate((np.array([np.zeros(P.shape[1])]), P), axis=0)
+    # Linearly space vector describing vertical range in radians
+    v_range = np.linspace((lsr_val.scan.vertical_angle_min*-1.0 + np.pi/2.0), (lsr_val.scan.vertical_angle_max*-1.0 + np.pi/2.0), lsr_val.scan.vertical_count, dtype=np.float64)
 
-  # Multiply out the rotation (RPR') and add vehicle + sensor offsets
-  P_prime = quat_mult(quat_mult(R, P), R_prime) + disp
+    # Tile and repeat variables to allow vectorized operations
+    R       = np.tile(R,          lsr_val.scan.count * lsr_val.scan.vertical_count)
+    R_prime = np.tile(R_prime,    lsr_val.scan.count * lsr_val.scan.vertical_count)  
+    disp    = np.tile(disp,       lsr_val.scan.count * lsr_val.scan.vertical_count)
+    h_range = np.tile(h_range,    lsr_val.scan.vertical_count)
+    v_range = np.repeat(v_range,  lsr_val.scan.count)
 
-  # Remove the pad and transpose for easy reading 
-  result = P_prime[1:4].T
+    # Get x, y, z components of the range readings in sensor frame and pad to assume pure quat form
+    # https://tutorial.math.lamar.edu/classes/calciii/SphericalCoords.aspx
+    P = np.array([lsr_val.scan.ranges * np.sin(v_range) * np.cos(h_range), lsr_val.scan.ranges * np.sin(v_range) * np.sin(h_range), lsr_val.scan.ranges * np.cos(v_range)])
 
-  # Access using the index of the return you'd like (in the format[v1h1 .. v20h1 v1h2 .. v20h2 v1h3 .. v20h3 ...]) and index of axis x=0, y=1, z=2
-  # e.g. result[-60:-40, 0:3] gives 20 x-y-z values starting from 60 from the end and ending at 40 from the end
+    # Double check that the equality still holds
+    # print(np.equal(np.round(np.square(lsr_val.scan.ranges), 4), np.round(np.square(P[0]) + np.square(P[1]) + np.square(P[2]), 4)))
+    
+    P = np.concatenate((np.array([np.zeros(P.shape[1])]), P), axis=0)
 
-  return result
+    # Multiply out the rotation (RPR') and add vehicle + sensor offsets
+    P_prime = quat_mult(quat_mult(R, P), R_prime) + disp
+
+    # Remove the pad and transpose for easy reading 
+    result = P_prime[1:4].T
+
+    # Access using the index of the return you'd like (in the format[v1h1 .. v20h1 v1h2 .. v20h2 v1h3 .. v20h3 ...]) and index of axis x=0, y=1, z=2
+    # e.g. result[-60:-40, 0:2] gives 20 x-y-z values starting from 60 from the end and ending at 40 from the end
+
+    return result
 
 
 
@@ -172,9 +176,10 @@ def get_next_wp (lsr_val, lla_ref_off):
         # These are the obstacle coordinates in world-frame.
         # Use them to determine where the obstacles are.
         # Access using the index of the return you'd like (in the format[v1h1 .. v20h1 v1h2 .. v20h2 v1h3 .. v20h3 ...]) and index of axis x=0, y=1, z=2
-        # e.g. result[-60:-40, 0:3] gives 20 x-y-z values starting from 60 from the end and ending at 40 from the end
-        registered_scans = get_world_obst(lsr_val, lla_ref_off) 
-
+        # e.g. result[-60:-40, 0:2] gives 20 x-y-z values starting from 60 from the end and ending at 40 from the end
+        # print("Registering scan")
+        registered_scans = get_world_obst(lsr_val) 
+        
         # Moving along x-axis, so y should stay constant
         y = 0
         ### DO NOT CHANGE ###
@@ -219,7 +224,8 @@ async def run_mission(drone, mission_items, lla_ref, gz_sub):
     end_point = [38, 0, 1]
 
     # The ned values are slightly skewed because the lla reference is at the start location, not world origin
-    lla_ref_off = navpy.lla2ned(0, 0, 0, lla_ref[0], lla_ref[1], lla_ref[2])
+    # lla_ref_off = navpy.lla2ned(0, 0, 0, lla_ref[0], lla_ref[1], lla_ref[2])
+    lla_ref_off = [0, 0, 0]
 
     [lat, lon, alt] = lla_ref # Set default mission item to start location
     
@@ -228,7 +234,7 @@ async def run_mission(drone, mission_items, lla_ref, gz_sub):
         lsr_val = await gz_sub.get_LaserScanStamped()
 
         # Get next wp and determine if done
-        # print("-- Getting next wp")
+        print("-- Getting next wp")
         [x, y, z, speed] = get_next_wp (lsr_val, lla_ref_off)
         if(not np.isnan(x)):
             [lat, lon, alt] = navpy.ned2lla([y, x, -z], lla_ref[0], lla_ref[1], lla_ref[2])
@@ -253,12 +259,13 @@ async def run_mission(drone, mission_items, lla_ref, gz_sub):
 async def run():
     # Some of the values are inf and numpy complains when doing math with them, so turn off warnings
     np.seterr(all='ignore') 
+    np.set_printoptions(suppress=True)
 
     # Make the Gazebo subscriber object
     gz_sub = GazeboMessageSubscriber(HOST, PORT)
 
     # Actually do the subscription
-    gz_task = asyncio.create_task(gz_sub.connect())
+    gz_task = asyncio.ensure_future(gz_sub.connect())
 
     # Get a test message - this will speed up all of the subsequent requests
     await gz_sub.get_LaserScanStamped()
@@ -285,9 +292,12 @@ async def run():
     lla_ref = []
     async for terrain_info in drone.telemetry.position():
         lla_ref = [terrain_info.latitude_deg, terrain_info.longitude_deg, terrain_info.absolute_altitude_m]
-        print(lla_ref)
         break
     
+    # start = navpy.lla2ned(lla_ref[0], lla_ref[1], lla_ref[2], 0, 0, 0)
+    
+    # print(f"Start:" f"{[start[1], start[0], -start[2]]}")
+
     # First mission item is to takeoff to just above our starting location
     await drone.action.set_maximum_speed(2)
     await drone.action.goto_location(lla_ref[0], lla_ref[1], lla_ref[2] + 1, 90)
@@ -296,8 +306,8 @@ async def run():
     # All of your mission items go between the the start point above and the end point below
     
     # Spool up the mission and mission monitor
-    mission_task = asyncio.create_task(run_mission(drone, [], lla_ref, gz_sub))
-    termination_task = asyncio.create_task(observe_is_in_air(drone, [mission_task, gz_task]))
+    mission_task = asyncio.ensure_future(run_mission(drone, [], lla_ref, gz_sub))
+    termination_task = asyncio.ensure_future(observe_is_in_air(drone, [mission_task, gz_task]))
 
     # Make the drone dangerous (arm it)
     print("-- Arming")
