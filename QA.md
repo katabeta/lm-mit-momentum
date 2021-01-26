@@ -17,8 +17,7 @@ The following is a constantly updating question and answer page with common ques
 - [10. How will my team be scored?](#10-how-will-my-team-be-scored)
 - [11. How do I generate the scored metrics?](#11-how-do-i-generate-the-scored-metrics)
   - [11.1. How do I get my time and AGL values?](#111-how-do-i-get-my-time-and-agl-values)
-  - [11.2. How do I log my runs in Gazebo?](#112-how-do-i-log-my-runs-in-gazebo)
-  - [11.3. How do I make a screen recording of my run for the presentation?](#113-how-do-i-make-a-screen-recording-of-my-run-for-the-presentation)
+  - [11.2. How do I make a screen recording of my run for the presentation?](#112-how-do-i-make-a-screen-recording-of-my-run-for-the-presentation)
 <!-- TOC and section numbers automatically generated, do not manually edit -->
 
 ## 1. How do I make a mission?
@@ -35,17 +34,12 @@ The objective of the mission is to go from start to finish following the AGL val
 
 Below are the pertitent values to your mission (relative to the origin of the terrain):
 
-- Start (in meters x, y, z): [1.0018754041018363, 0.9619961870448452, -0.08300015609711409]
-  - This is where the drone is spawned automatically by PX4
-- Finish (in meters x, y, z): [39.0018754041018363, 0.9619961870448452, 0.91699984390288591]
-- Target AGL: 3 m
-
-If you are using the [template](https://github.com/katabeta/lm-mit-momentum/blob/master/template_goto.py), the start and end values are expressed relative to your start position:
-
 - Start (in meters x, y, z): [0, 0, 0]
   - This is where the drone is spawned automatically by PX4
 - Finish (in meters x, y, z): [38, 0, 1]
 - Target AGL: 3 m
+
+**NOTE:** The AGL tracker plug in will spawn the drone at [0, 0, 0]. If you don't have the AGL tracker setup correctly, PX4 will start your drone slightly offset, which is not correct.
 
 ## 3. How do I read LiDAR returns from code?
 
@@ -132,51 +126,37 @@ Teams will be ranked based on their performance in three areas: time, accuracy o
 The judges score will consist of (but is not limited to):
 
 - Creativity
+- Teamwork
 - Presentation
 - Customer satisfaction (e.g. reliability, testability, etc.)
 
-The only metric that will be scored live is the judges score. For the other two, the teams will submit their times and averages as reported by the AGL tracker Gazebo plugin (*still WIP*). Teams will have to send their AGL and times scores (see [How do I generate the scored metrics?](#11-how-do-i-generate-the-scored-metrics)), as well as a corresponding Gazebo recording to TA Jimmy.
+The only metric that will be scored live is the judge's score. For the other two, teams will submit their times and averages as reported by the AGL tracker Gazebo plugin (***still WIP***). Teams should follow the instructions in section [How do I generate the scored metrics?](#11-how-do-i-generate-the-scored-metrics) for submitting these items.
 
-Teams will also be required to create a video showcasing their strategy and results. This video will be shown during the team's presentation. The teams are free to structure their presentation as they see fit, but we recommend that teams use this reel to aid the team in showcasing their strategy and in talking about their development process. As such, this reel does not have to show the entire flight. This video will be uploaded to YouTube and the link will be submitted with the times and averages.
+**For the presentation only**, teams will also be required to create a video showcasing their strategy and results. This video will be shown during the team's presentation. The teams are free to structure their presentation as they see fit, but we recommend that teams use this reel to aid the team in showcasing their strategy and in talking about their development process. As such, this reel does not have to show the entire flight. This video will be uploaded to YouTube and the link will be submitted with the times and averages.
 
 ## 11. How do I generate the scored metrics?
 
 ### 11.1. How do I get my time and AGL values?
 
-You will use the provided AGL tracker Gazebo plugin. This plugin launches with Gazebo when you run the `make px4_sitl gazebo_iris_lmlidar__terrain2d` command.
+You will use the provided AGL tracker Gazebo plugin (***still WIP***). This plugin launches with Gazebo when you run the `make px4_sitl gazebo___terrain2d` command.
 
-The tracker plugin and detailed instructions on how to access the values recorded by it will be available NLT 24 JAN.
+The tracker plugin and detailed instructions on how to access the values recorded by it will be available NLT 25 JAN, but you can expect the plugin to print to console the AGL values and time, and these prints will be saved to a log file. One member from each team will have to submit the following items by sending an email to momentum.scores@gmail.com. Format the email like this:
 
-Once the tracker is provided, to check if it is running, you should see `Loading AGL Tracker Plugin...` when launching PX4 with gazebo in the status messages in the terminal. If you do not have it running, make sure that you run the setup script (`sudo ./lm_setup.sh`) as it copies the tracker binary into the PX4 directory.
+Subject: *Team #: team_name*
 
-### 11.2. How do I log my runs in Gazebo?
+Body:
 
-You can use the command line utility `gz log` to record a log in Gazebo.
+- AGL score
+- Time score
+- Reel video
 
-In order to start recording, you have to have Gazebo running and you have to have an available terminal window. Below are the commands you will need to start, stop, and playback your log.
+Attached:
 
-``` sh
-# Start recording
-gz log -d 1
-```
+- Log of prints output from plugin, renamed to the format `<team_name>_<team_#>`
 
-*Do your mission here.*
+Once the tracker is provided, to check if it is running, you should see `Loading AGL Tracker Plugin...` when launching PX4 with gazebo in the status messages in the terminal. If you do not have it running, make sure that you the instructions provided in the plugin folder.
 
-``` sh
-# Stop recording
-gz log -d 0
-```
-
-``` sh
-# Playback your recording - note that your log directory may look different
-gazebo -p ~/.gazebo/log/<timestamped folder>/gzserver/state.log
-```
-
-For more information, refer to Gazebo documentation on [logging utilities](http://gazebosim.org/tutorials?tut=log_filtering&cat=tools_utilities) and [log playback](http://gazebosim.org/tutorials?tut=logging_playback).
-
-This log will be submitted with your AGL and time values to Jimmy.
-
-### 11.3. How do I make a screen recording of my run for the presentation?
+### 11.2. How do I make a screen recording of my run for the presentation?
 
 If you wish to record from Ubuntu, perform the following terminal command in order to increase the timeout on screencapture.
 

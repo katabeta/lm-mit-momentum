@@ -154,7 +154,8 @@ async def run_mission(drone, mission_items, lla_ref, gz_sub):
     done = False # Flag to signal when we're done with our mission
 
     # The ned values are slightly skewed because the lla reference is at the start location, not world origin
-    lla_ref_off = navpy.lla2ned(0, 0, 0, lla_ref[0], lla_ref[1], lla_ref[2])
+    # lla_ref_off = navpy.lla2ned(0, 0, 0, lla_ref[0], lla_ref[1], lla_ref[2])
+    lla_ref_off = [0, 0, 0]
 
     [lat, lon, alt] = lla_ref # Set default mission item to start location
 
