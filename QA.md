@@ -17,7 +17,8 @@ The following is a constantly updating question and answer page with common ques
 - [10. How will my team be scored?](#10-how-will-my-team-be-scored)
 - [11. How do I generate the scored metrics?](#11-how-do-i-generate-the-scored-metrics)
   - [11.1. How do I get my time and AGL values?](#111-how-do-i-get-my-time-and-agl-values)
-  - [11.2. How do I make a screen recording of my run for the presentation?](#112-how-do-i-make-a-screen-recording-of-my-run-for-the-presentation)
+  - [11.2. How do I log my runs in Gazebo?](#112-how-do-i-log-my-runs-in-gazebo)
+  - [11.3. How do I make a screen recording of my run for the presentation?](#113-how-do-i-make-a-screen-recording-of-my-run-for-the-presentation)
 <!-- TOC and section numbers automatically generated, do not manually edit -->
 
 ## 1. How do I make a mission?
@@ -152,11 +153,37 @@ Body:
 
 Attached:
 
-- Log of prints output from plugin, renamed to the format `<team_name>_<team_#>`
+- Log of prints output from plugin, renamed to the format `<team_name>_<team_#>_plugin.log`
+- Gazebo log, remaned to the format `<team_name>_<team_#>_gazebo.log`
 
-Once the tracker is provided, to check if it is running, you should see `Loading AGL Tracker Plugin...` when launching PX4 with gazebo in the status messages in the terminal. If you do not have it running, make sure that you the instructions provided in the plugin folder.
+Once the tracker is provided, to check if it is running, you should see `Loading AGL Tracker Plugin...` when launching PX4 with gazebo in the status messages in the terminal. If you do not have it running, make sure that you follow the instructions provided in the [plugin folder](https://github.com/katabeta/lm-mit-momentum/tree/master/plugin).
 
-### 11.2. How do I make a screen recording of my run for the presentation?
+### 11.2. How do I log my runs in Gazebo?
+
+You can use the command line utility `gz log` to record a log in Gazebo.
+
+In order to start recording, you have to have Gazebo running and you have to have an available terminal window. Below are the commands you will need to start, stop, and playback your log.
+
+``` sh
+# Start recording
+gz log -d 1
+```
+
+*Do your mission here.*
+
+``` sh
+# Stop recording
+gz log -d 0
+```
+
+``` sh
+# Playback your recording - note that your log directory may look different
+gazebo -p ~/.gazebo/log/<timestamped folder>/gzserver/state.log
+```
+
+For more information, refer to Gazebo documentation on [logging utilities](http://gazebosim.org/tutorials?tut=log_filtering&cat=tools_utilities) and [log playback](http://gazebosim.org/tutorials?tut=logging_playback).
+
+### 11.3. How do I make a screen recording of my run for the presentation?
 
 If you wish to record from Ubuntu, perform the following terminal command in order to increase the timeout on screencapture.
 
