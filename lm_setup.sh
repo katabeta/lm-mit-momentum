@@ -21,9 +21,6 @@ cp -f py3gazebo_setup/pygazebo.py ../py3gazebo/pygazebo/pygazebo.py
 cp scritps/set_home.sh ../PX4/PX4-Autopilot/
 cp px4_param_defaults/iris_defaults ../PX4/PX4-Autopilot/build/px4_sitl_default/tmp/rootfs/
 
-# Copy AGL Plugin proto files into gazebo msgs directory
-cp plugin/agl_debug.pb.h ../PX4/PX4-Autopilot/build/px4_sitl_default/build_gazebo
-
 # Change to the PX4 directory
 cd ../PX4/PX4-Autopilot/
 mkdir -p build/px4_sitl_default/build_gazebo

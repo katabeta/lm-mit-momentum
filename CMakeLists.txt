@@ -20,9 +20,7 @@ list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/plugin")
 
 add_library(agl_tracker SHARED 
-	plugin/agl_tracker.cc
-	plugin/agl_debug.pb.cc
-    )
+	plugin/agl_tracker.cc)
     
 target_link_libraries(agl_tracker
 	${GAZEBO_LIBRARIES}	)

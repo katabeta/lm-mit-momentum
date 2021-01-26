@@ -4,20 +4,14 @@
 
 #include "gazebo/physics/physics.hh"
 #include "gazebo/common/common.hh"
+#include "gazebo/common/Assert.hh"
+#include "gazebo/common/Time.hh"
 #include "gazebo/transport/transport.hh"
 #include "gazebo/gazebo.hh"
 
 #include "gazebo/physics/CylinderShape.hh"
 #include "gazebo/physics/HeightmapShape.hh"
 #include "gazebo/physics/Model.hh"
-
-// Subscribe to uORB messages from PX4 to detect vehicle states
-// #include <uORB/uORB.h>
-// #include <uORB/topics/vehicle_status.h>
-
-// The advertised message used for debugging
-#include "agl_debug.pb.h"
-
 
 namespace gazebo
 {
@@ -30,8 +24,9 @@ class AglTracker : public WorldPlugin
   {
     // No takeoff detected yet, wait until the next update
     _running = false;
+
     _num_agl_samples = 0;
-    _agl_avg = 0.0;
+    _agl_avg = TARGET_AGL;
     _agl_avg_error = 0.0;
 
     _last_tracked_x = 0.0;  // Vehicle, by default starts off at 0,0 relative to world terrain
@@ -70,13 +65,13 @@ class AglTracker : public WorldPlugin
 
 
   /**
-   * @brief Advertise the calculated AGL on topic "~/agl"
+   * @brief Print out Team status "
    * 
    * @param veh_pose 
    * @param current_agl 
-   * @param avg_agl 
+   * @param ground_z
    */
-void PublishAGL(ignition::math::Pose3d veh_pose, double current_agl, double avg_agl);
+void PublishAGL(ignition::math::Pose3d veh_pose, double current_agl, double ground_z);
 
   /**
    * @brief Subscribe to Vehicle Status via uORB 
@@ -112,8 +107,8 @@ void PublishAGL(ignition::math::Pose3d veh_pose, double current_agl, double avg_
   // Denote the correct locations for the given AGL 
   double _last_tracked_x;  // Previous X coord to be tracked
   double _last_tracked_y;  // Previous Y coord to be tracked
-  const double TRACKING_DIST = 2.0;   // Track the vehicle and sample it's AGL every 2 meters horizontally in any direction
-  double _terrain_min_height; // 
+  const double TRACKING_DIST = 1.0;   // Track the vehicle and sample it's AGL every 2 meters horizontally in any direction
+  double _terrain_min_height; // Minimum  
   double _terrain_max_height; 
 
   // Physical parameters of the model during the run
@@ -121,12 +116,6 @@ void PublishAGL(ignition::math::Pose3d veh_pose, double current_agl, double avg_
   double _min_horz_speed;     // Smallest linear velocity along (X,Y), find vector length
   double _max_vert_speed;     // Largest linear velocity aloing (Z)
   double _min_vert_speed;     // Smallest linear velocity along (Z)
-
-  // Create a publisher on the '~/agl_tracker' topic
-  const std::string _default_agl_topic = "~/iris_lmlidar/agl_debug";
-  gazebo::msgs::AglDebug _agl_msg;
-  transport::NodePtr _publisher_node;
-  transport::PublisherPtr _agl_publisher;
 
   // Subscribe to the vehicle status
   int _veh_status_sub;
