@@ -110,3 +110,56 @@ Teams should experiment reading the LiDAR while Gazebo is running to convince th
 A typical LiDAR returns an intensity value, which is a measure of the intensity of the returned beam. This means that this return measures the reflectivity of the surface to the wavelength of the beams cast by the LiDAR.
 
 This value is irrelevant for the purposes of this competition.
+
+
+## 11. What do I record for the mission
+
+The competition will be derived by your best AGL performance which is ultimately dependent on your world's representation and the motion planning algorithm to go around it. 
+
+First, to validate running PX4 we would like to view your trajectory:
+``` sh
+# Terminal #1: Inside PX4/PX4-Autopilot
+make px4_sitl gazebo___terrain2d 2>&1 | tee team_name.txt
+``` 
+
+Where the output file should be changed from "team_name.txt" to something more logical and identifiable, right?
+
+NOTE: To better gauge your vehicle's progress while the mission is running, then you would need an extra terminal:
+``` sh
+# Terminal #2: Viewing only a select portion from the PX4 Output
+# Inside PX4/PX4-Autopilot, this will highlight the Agl Tracker Plugin output
+tail -f team_name.txt |grep "AGL"
+```
+
+Of course, on a third terminal, run your mission's python code
+``` sh
+# Terminal 3: Run mission python code
+python3 ./your/python/code
+```
+
+To verify other attributes and the veracity of the code, we will be requesting that you submit an official Gazebo log as well.
+As soon as you start your Python3 Mission, 
+``` sh
+# Terminal 4: (If recording State Log through GUI) State Logs
+rm -rf ~/.gazebo/logs/* # Dangerous
+gz log -d 1   # Start recording
+gz log -d 0   # Stop recording
+cd ~/.gazebo/logs/<log_name>/gzserver/state.log
+```
+NOTE: I suggest using the GAZEBO GUI to record a log to whatever directory you want. This can be found on the top-right of the screen i.e. CTRL+D (Not record a VIDEO) and press the red 'record' twice, once to initiate, another time to end. By default, the logs are saved in your '~/.gazebo/log' directory
+
+Finally, by running PX4 SITL with the proper 'AglTracker' Plugin you will find a '.csv' within your build directory that we will be using for the scoring template as well.
+
+``` sh
+# Inside PX4/PX4-Autopilot
+cd build/px4_sitl_default/tmps
+```
+NOTE: PLease rename your .csv, yes?
+
+In all, please give us your 
+1. "team_name.txt" that essentially covers all of the PX4 output
+2. "team_name.csv" that contains information about your entire trajectory
+3. "team_name_state.log" A State Log recording of your Gazebo outputs
+
+From these, we will know your final score and final time!
+Thank you for everything!
