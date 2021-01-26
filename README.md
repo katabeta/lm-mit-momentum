@@ -2,6 +2,8 @@
 
 If you are viewing this file offline, the most up to date version of these instructions is located in the [project GitHub](https://github.com/katabeta/lm-mit-momentum).
 
+***ATTENTION STUDENTS:***  **THERE WAS AN UPDATE TO THE LIDAR REGISTRATION ALGORITHM**. If you are using the default templates or are relying on the LIDAR registration algorithm in them, the previous versions of these files contained a bug in the coordinate transforms. This bug has been fixed and you must update your files. Thanks to the student who pointed out the bug during office hours on 25 JAN.
+
 **NOTES:**
 
 1. Unless otherwise specified, all instructions are to be entered into the terminal in your Ubuntu installation.
