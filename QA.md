@@ -16,7 +16,7 @@ The following is a constantly updating question and answer page with common ques
 - [9. What is contour flight?](#9-what-is-contour-flight)
 - [10. How will my team be scored?](#10-how-will-my-team-be-scored)
 - [11. How do I generate the scored metrics?](#11-how-do-i-generate-the-scored-metrics)
-  - [11.1. What do I record for the mission](#111-what-do-i-record-for-the-mission)
+  - [11.1. What do I record for the mission?](#111-what-do-i-record-for-the-mission)
   - [11.2. How do I make a screen recording of my run for the presentation?](#112-how-do-i-make-a-screen-recording-of-my-run-for-the-presentation)
   - [11.3. How and what do I turn in?](#113-how-and-what-do-i-turn-in)
 <!-- TOC and section numbers automatically generated, do not manually edit -->
@@ -131,13 +131,13 @@ The judges score will consist of (but is not limited to):
 - Presentation
 - Customer satisfaction (e.g. reliability, testability, etc.)
 
-The only metric that will be scored live is the judge's score. For the other two, teams will submit their times and averages as reported by the AGL tracker Gazebo plugin (***still WIP***). Teams should follow the instructions in section [How do I generate the scored metrics?](#11-how-do-i-generate-the-scored-metrics) for submitting these items.
+The only metric that will be scored live is the judge's score. For the other two, teams will submit their times and averages as reported by the AGL tracker Gazebo plugin. Teams should follow the instructions in section [How do I generate the scored metrics?](#11-how-do-i-generate-the-scored-metrics) for submitting these items.
 
 **For the presentation only**, teams will also be required to create a video showcasing their strategy and results. This video will be shown during the team's presentation. The teams are free to structure their presentation as they see fit, but we recommend that teams use this reel to aid the team in showcasing their strategy and in talking about their development process. As such, this reel does not have to show the entire flight. This video will be uploaded to YouTube and the link will be submitted with the times and averages.
 
 ## 11. How do I generate the scored metrics?
 
-### 11.1. What do I record for the mission
+### 11.1. What do I record for the mission?
 
 The competition will be derived by your best AGL performance which is ultimately dependent on your the motion planning algorithm to navigate the provided terrain.
 
@@ -203,12 +203,10 @@ Body:
 
 - AGL score
 - Time score
-- YouTube linke to video reel
+- YouTube link to video reel if ready, or send separately NLT 8PM 27 JAN
 
-Attached (replace `<team_name>` with your actually team or team number):
+Attached (replace `<team_name>` with your actual team name or team number):
 
 - Log of prints output from plugin, renamed to the format `<team_name>.txt`
 - Information about your drone's path, renamed to the format `<team_name>.csv`
-- Gazebo log, remaned to the format `<team_name>.log`
-
-Once the tracker is provided, to check if it is running, you should see `Loading AGL Tracker Plugin...` when launching PX4 with gazebo in the status messages in the terminal. If you do not have it running, make sure that you follow the instructions provided in the [plugin folder](https://github.com/katabeta/lm-mit-momentum/tree/master/plugin).
+- Gazebo log, renamed to the format `<team_name>.log`
